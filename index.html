@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 <style>
 :root {
   --bg:#F1F5F9;--surface:#FFFFFF;--surface2:#F8FAFC;--border:#E2E8F0;
@@ -132,8 +133,6 @@ tbody td{padding:8px 12px;color:var(--txt);white-space:nowrap}
 .dias-ok{color:var(--txt2)}
 
 /* ── COUNTDOWN BAR ── */
-.cdbar{position:fixed;bottom:0;left:0;right:0;height:3px;background:var(--border);z-index:300}
-.cdfill{height:100%;background:var(--teal);transition:width 1s linear}
 
 /* ── FOOTER ── */
 footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
@@ -241,15 +240,15 @@ footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);bor
   <!-- CHARTS -->
   <div class="charts-row">
     <div class="card">
-      <div class="card-title">Status dos Itens</div>
+      <div class="card-title">Status dos Processos</div>
       <div class="chart-wrap" style="height:200px"><canvas id="cStatus"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">Itens em Terceiros por Processo (Top 12)</div>
-      <div class="chart-wrap" style="height:200px"><canvas id="cProcesso"></canvas></div>
+      <div class="card-title">Processos por Status</div>
+      <div class="chart-wrap" id="wrapProcesso" style="height:200px;overflow-y:auto"><canvas id="cProcesso"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">Entradas por Mês</div>
+      <div class="card-title">Entradas por Mês (var. %)</div>
       <div class="chart-wrap" style="height:200px"><canvas id="cMes"></canvas></div>
     </div>
   </div>
@@ -339,8 +338,7 @@ footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);bor
   </div>
 </div>
 
-<div class="cdbar"><div class="cdfill" id="cdFill" style="width:100%"></div></div>
-<footer>BYD Pós-Vendas · Aurora · Auto-refresh a cada 60s · <span id="totalReg">—</span></footer>
+<footer>BYD Pós-Vendas · Aurora · <span id="totalReg">—</span></footer>
 
 <script>
 // ── CONFIG ──────────────────────────────────────────────────────────────────
@@ -351,12 +349,11 @@ const PROXIES = [
   u => 'https://thingproxy.freeboard.io/fetch/' + u,
   u => u
 ];
-const INTERVAL = 60;
 const PAGE_SIZE = 50;
 
 let raw = [], filtered = [];
 let charts = {};
-let cdTimer = null, cdVal = INTERVAL;
+let cdTimer = null;
 let sortState = {};
 let pages = { tTerceiros:0, tEntrada:0, tDev:0 };
 
@@ -481,7 +478,6 @@ async function loadData(){
     document.getElementById('totalReg').textContent = raw.length+' registros carregados';
     applyFilters();
     setUpdTime();
-    resetCD();
   } catch(e){
     console.error(e);
     document.getElementById('kpiGrid').innerHTML = `
@@ -658,46 +654,104 @@ function renderCharts(){
   Chart.defaults.font.family='Inter';
   Chart.defaults.font.size=11;
 
-  // Donut status
-  const ab=filtered.filter(r=>r._status==='Em Aberto').length;
-  const tc=filtered.filter(r=>r._status==='Em Terceiros').length;
-  const rt=filtered.filter(r=>r._status==='Retornado').length;
-  if(charts.st) charts.st.destroy();
-  charts.st=new Chart(document.getElementById('cStatus'),{
-    type:'doughnut',
-    data:{labels:['Em Aberto','Em Terceiros','Retornado'],
-      datasets:[{data:[ab,tc,rt],backgroundColor:['#DC2626','#EA580C','#16A34A'],borderWidth:0,hoverOffset:5}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'65%',
-      plugins:{legend:{position:'bottom',labels:{padding:8,boxWidth:9,color:C.text}},
-        tooltip:{callbacks:{label:c=>` ${c.label}: ${c.raw} (${(c.raw/Math.max(filtered.length,1)*100).toFixed(1)}%)`}}}}
-  });
+  // Registra plugin datalabels globalmente
+  if(window.ChartDataLabels) Chart.register(ChartDataLabels);
 
-  // Bar: processos em terceiros top 12
+  // ── Classificar processos por status ──────────────────────────────────
   const pm={};
   filtered.forEach(r=>{
     const p=r['Processo']||'N/A';
-    if(!pm[p]) pm[p]={tc:0,rt:0,ab:0};
+    if(!pm[p]) pm[p]={tc:0,rt:0,ab:0,total:0};
+    pm[p].total++;
     if(r._status==='Em Terceiros') pm[p].tc++;
     else if(r._status==='Retornado') pm[p].rt++;
     else pm[p].ab++;
   });
-  const sorted=Object.entries(pm).sort((a,b)=>(b[1].tc+b[1].ab)-(a[1].tc+a[1].ab)).slice(0,12);
+
+  // Status do processo: Em Aberto > Em Terceiros > Retornado (prioridade)
+  let procAb=0,procTc=0,procRt=0;
+  Object.values(pm).forEach(v=>{
+    if(v.ab>0) procAb++;
+    else if(v.tc>0) procTc++;
+    else procRt++;
+  });
+  const totalProc=procAb+procTc+procRt||1;
+
+  // ── Donut: QUANTIDADE DE PROCESSOS ────────────────────────────────────
+  if(charts.st) charts.st.destroy();
+  charts.st=new Chart(document.getElementById('cStatus'),{
+    type:'doughnut',
+    data:{
+      labels:['Aguard. Entrada NF','Em Terceiros','Retornado'],
+      datasets:[{
+        data:[procAb,procTc,procRt],
+        backgroundColor:['#EAB308','#0F172A','#0D9488'],
+        borderWidth:2,
+        borderColor:'transparent',
+        hoverOffset:6
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,cutout:'62%',
+      plugins:{
+        legend:{position:'bottom',labels:{padding:8,boxWidth:9,color:C.text}},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${ctx.raw} processos (${(ctx.raw/totalProc*100).toFixed(1)}%)`}},
+        datalabels:{
+          color:'#fff',
+          font:{weight:'700',size:12},
+          formatter:(v)=>v>0?v:'',
+          textShadowBlur:3,
+          textShadowColor:'rgba(0,0,0,.4)'
+        }
+      }
+    }
+  });
+
+  // ── Bar: TODOS os processos com qtde de itens ─────────────────────────
+  const allProc=Object.entries(pm).sort((a,b)=>b[1].total-a[1].total);
+  const barH=Math.max(220, allProc.length*30+40);
+  const wrap=document.getElementById('wrapProcesso');
+  if(wrap) wrap.style.height=barH+'px';
+
+  const procLabels=allProc.map(([p])=>p);
+  const procTotals=allProc.map(([,v])=>v.total);
+  const procColors=allProc.map(([,v])=>v.ab>0?'#EAB308':v.tc>0?'#0F172A':'#0D9488');
+
   if(charts.pr) charts.pr.destroy();
   charts.pr=new Chart(document.getElementById('cProcesso'),{
     type:'bar',
-    data:{labels:sorted.map(([p])=>p),
-      datasets:[
-        {label:'Em Terceiros',data:sorted.map(([,v])=>v.tc),backgroundColor:'#EA580C',borderRadius:3,borderSkipped:false},
-        {label:'Em Aberto',data:sorted.map(([,v])=>v.ab),backgroundColor:'#DC2626',borderRadius:3,borderSkipped:false},
-        {label:'Retornado',data:sorted.map(([,v])=>v.rt),backgroundColor:'#16A34A',borderRadius:3,borderSkipped:false}
-      ]},
-    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-      plugins:{legend:{position:'bottom',labels:{padding:8,boxWidth:9,color:C.text}}},
-      scales:{x:{stacked:true,grid:{color:C.grid},ticks:{color:C.text}},
-              y:{stacked:true,grid:{display:false},ticks:{color:C.text}}}}
+    data:{
+      labels:procLabels,
+      datasets:[{
+        label:'Itens',
+        data:procTotals,
+        backgroundColor:procColors,
+        borderRadius:4,
+        borderSkipped:false
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{
+        legend:{display:false},
+        datalabels:{
+          anchor:'end',
+          align:'end',
+          color:C.text,
+          font:{weight:'700',size:11},
+          formatter:(v)=>v,
+          padding:{left:4}
+        }
+      },
+      scales:{
+        x:{grid:{display:false},border:{display:false},ticks:{color:C.text}},
+        y:{grid:{display:false},border:{display:false},ticks:{color:C.text}}
+      },
+      layout:{padding:{right:35}}
+    }
   });
 
-  // Line: entradas por mês
+  // ── Line: Entradas por mês com variação % ─────────────────────────────
   const mm={};
   filtered.forEach(r=>{
     if(!r._dtEmit) return;
@@ -705,15 +759,55 @@ function renderCharts(){
     mm[k]=(mm[k]||0)+1;
   });
   const months=Object.entries(mm).sort((a,b)=>a[0].localeCompare(b[0]));
+  const vals=months.map(([,v])=>v);
+
   if(charts.mn) charts.mn.destroy();
   charts.mn=new Chart(document.getElementById('cMes'),{
     type:'line',
-    data:{labels:months.map(([k])=>{const[y,m]=k.split('-');return new Date(+y,+m-1,1).toLocaleDateString('pt-BR',{month:'short',year:'2-digit'})}),
-      datasets:[{label:'Itens',data:months.map(([,v])=>v),
-        borderColor:'#0D9488',backgroundColor:'rgba(13,148,136,.12)',fill:true,tension:.3,pointRadius:3,pointBackgroundColor:'#0D9488'}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{x:{grid:{color:C.grid},ticks:{color:C.text}},y:{grid:{color:C.grid},ticks:{color:C.text}}}}
+    data:{
+      labels:months.map(([k])=>{const[y,m]=k.split('-');return new Date(+y,+m-1,1).toLocaleDateString('pt-BR',{month:'short',year:'2-digit'})}),
+      datasets:[{
+        label:'Itens',
+        data:vals,
+        borderColor:'#0D9488',
+        backgroundColor:'transparent',
+        fill:false,
+        tension:.3,
+        pointRadius:4,
+        pointBackgroundColor:'#0D9488',
+        pointBorderColor:'var(--surface)',
+        pointBorderWidth:2
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        datalabels:{
+          anchor:'top',
+          align:'top',
+          offset:4,
+          font:{weight:'600',size:10},
+          color:(ctx)=>{
+            const i=ctx.dataIndex;
+            if(i===0) return C.text;
+            return vals[i]>=vals[i-1]?'#16A34A':'#DC2626';
+          },
+          formatter:(v,ctx)=>{
+            const i=ctx.dataIndex;
+            if(i===0) return v;
+            const prev=vals[i-1];
+            if(!prev) return v;
+            const pct=((v-prev)/prev*100).toFixed(0);
+            return v+'\n'+(pct>=0?'+':'')+pct+'%';
+          }
+        }
+      },
+      scales:{
+        x:{grid:{display:false},border:{display:false},ticks:{color:C.text}},
+        y:{grid:{color:C.grid},border:{display:false},ticks:{color:C.text}}
+      }
+    }
   });
 }
 
@@ -842,18 +936,7 @@ function sortTable(tId,col){
 }
 
 // ── COUNTDOWN ────────────────────────────────────────────────────────────────
-function resetCD(){
-  cdVal=INTERVAL;
-  if(cdTimer) clearInterval(cdTimer);
-  cdTimer=setInterval(()=>{
-    cdVal--;
-    document.getElementById('cdFill').style.width=(cdVal/INTERVAL*100)+'%';
-    if(cdVal<=0){ clearInterval(cdTimer); loadData(); }
-  },1000);
-}
-
 function doRefresh(){
-  if(cdTimer) clearInterval(cdTimer);
   loadData();
 }
 
