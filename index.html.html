@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurora · Controle de Estoque</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:#F1F5F9;--surface:#FFFFFF;--surface2:#F8FAFC;--border:#E2E8F0;
+  --txt:#0A1628;--txt2:#475569;--muted:#94A3B8;
+  --teal:#0D9488;--teal-lt:#CCFBF1;--teal-dk:#0F766E;
+  --blue:#1D4ED8;--orange:#EA580C;--red:#DC2626;--green:#16A34A;
+  --sh:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
+  --sh2:0 4px 12px rgba(0,0,0,.1);--r:12px;--r2:8px;
+}
+[data-theme=dark]{
+  --bg:#060D1A;--surface:#0F1F35;--surface2:#0A1628;--border:#1E3A5F;
+  --txt:#E2E8F0;--txt2:#94A3B8;--muted:#475569;
+  --sh:0 1px 3px rgba(0,0,0,.4);--sh2:0 4px 12px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;transition:background .2s,color .2s}
+
+/* ── HEADER ── */
+.hdr{background:var(--surface);border-bottom:1px solid var(--border);height:58px;display:flex;align-items:center;gap:14px;padding:0 20px;position:sticky;top:0;z-index:200;box-shadow:var(--sh)}
+.brand{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.brand-dot{width:8px;height:8px;border-radius:50%;background:var(--teal)}
+.brand-name{font-size:14px;font-weight:700;letter-spacing:-.01em}
+.brand-sub{font-size:10px;color:var(--muted);font-weight:400}
+.sep{width:1px;height:24px;background:var(--border);flex-shrink:0}
+.hero-search{flex:1;max-width:400px;position:relative}
+.hero-search input{width:100%;height:36px;padding:0 40px 0 36px;border:1.5px solid var(--border);border-radius:var(--r2);background:var(--surface2);color:var(--txt);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color .15s}
+.hero-search input:focus{border-color:var(--teal);background:var(--surface)}
+.hero-search .ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);pointer-events:none}
+.hero-badge{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:var(--teal);color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;display:none}
+.hdr-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+.upd-info{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);white-space:nowrap}
+.upd-dot{width:6px;height:6px;border-radius:50%;background:var(--green);transition:background .3s}
+.upd-dot.spin{background:var(--orange);animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.btn{height:32px;padding:0 12px;border-radius:6px;border:1.5px solid var(--border);background:var(--surface);color:var(--txt2);font-family:'Inter',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s;white-space:nowrap}
+.btn:hover{border-color:var(--teal);color:var(--teal)}
+.btn-teal{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn-teal:hover{background:var(--teal-dk);border-color:var(--teal-dk);color:#fff}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ── MAIN ── */
+.main{padding:18px 20px 60px;max-width:1700px;margin:0 auto}
+
+/* ── PROCESSO BANNER ── */
+.proc-banner{background:linear-gradient(120deg,var(--teal) 0%,var(--teal-dk) 100%);border-radius:var(--r);padding:14px 20px;margin-bottom:16px;display:none;align-items:center;gap:20px;color:#fff}
+.proc-banner.on{display:flex}
+.pb-label{font-size:10px;font-weight:600;opacity:.75;text-transform:uppercase;letter-spacing:.06em}
+.pb-value{font-size:24px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.pb-stats{margin-left:auto;display:flex;gap:28px}
+.pb-stat{text-align:right}
+.pb-stat-v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.pb-stat-l{font-size:10px;opacity:.7;margin-top:1px}
+.pb-close{background:rgba(255,255,255,.15);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
+.pb-close:hover{background:rgba(255,255,255,.3)}
+
+/* ── FILTER BAR ── */
+.fbar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:16px;box-shadow:var(--sh)}
+.fg{display:flex;flex-direction:column;gap:3px;flex:1;min-width:110px;max-width:200px}
+.fg label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.fi{height:30px;padding:0 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface2);color:var(--txt);font-family:'Inter',sans-serif;font-size:12px;outline:none;transition:border-color .15s;width:100%}
+.fi:focus{border-color:var(--teal)}
+.fg-processo{max-width:200px}
+.fg-processo .fi{font-weight:600;border-color:var(--teal);border-width:1.5px}
+.fclear{height:30px;padding:0 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;align-self:flex-end}
+.fclear:hover{border-color:var(--red);color:var(--red)}
+
+/* ── KPI GRID ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh);position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s}
+.kpi:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
+.kpi-bar-top{position:absolute;top:0;left:0;width:100%;height:3px}
+.kpi-lbl{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px}
+.kpi-val{font-size:28px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.kpi-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.kpi-track{height:3px;background:var(--border);border-radius:2px;margin-top:10px;overflow:hidden}
+.kpi-fill{height:100%;border-radius:2px;transition:width .6s ease}
+
+/* ── CHARTS ── */
+.charts-row{display:grid;grid-template-columns:260px 1fr 1fr;gap:12px;margin-bottom:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--sh)}
+.card-title{font-size:11px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+.chart-wrap{position:relative}
+
+/* ── TABLE CARD ── */
+.tcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:16px;overflow:hidden}
+.thead-bar{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.thead-bar .ttitle{font-size:13px;font-weight:600}
+.tcnt{background:var(--teal-lt);color:var(--teal-dk);font-size:11px;font-weight:700;padding:2px 9px;border-radius:10px}
+[data-theme=dark] .tcnt{background:rgba(13,148,136,.2);color:var(--teal)}
+.tval{margin-left:auto;font-size:11px;color:var(--muted);font-weight:500}
+.tscroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{padding:7px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;background:var(--surface2);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none}
+thead th:hover{color:var(--teal)}
+thead th.sorted{color:var(--teal)}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--surface2)}
+tbody td{padding:8px 12px;color:var(--txt);white-space:nowrap}
+.totrow td{font-weight:600;border-top:2px solid var(--border);background:var(--surface2)!important}
+.empty{padding:32px;text-align:center;color:var(--muted);font-size:12px}
+.loading{padding:40px;text-align:center;color:var(--muted);font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px}
+.spin-ico{display:inline-block;animation:rotate 1s linear infinite}
+@keyframes rotate{to{transform:rotate(360deg)}}
+
+/* ── BOTTOM GRID ── */
+.bot-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;white-space:nowrap}
+.b-dot{width:5px;height:5px;border-radius:50%}
+.bg{background:#DCFCE7;color:#15803D}
+.bo{background:#FEF3C7;color:#B45309}
+.br{background:#FEE2E2;color:#DC2626}
+.bb{background:#DBEAFE;color:#1D4ED8}
+[data-theme=dark] .bg{background:rgba(22,163,74,.2);color:#4ADE80}
+[data-theme=dark] .bo{background:rgba(234,88,12,.2);color:#FB923C}
+[data-theme=dark] .br{background:rgba(220,38,38,.2);color:#F87171}
+[data-theme=dark] .bb{background:rgba(29,78,216,.2);color:#60A5FA}
+.ptag{background:var(--teal-lt);color:var(--teal-dk);padding:2px 7px;border-radius:4px;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+[data-theme=dark] .ptag{background:rgba(13,148,136,.2);color:var(--teal)}
+.dias-warn{color:var(--red);font-weight:700}
+.dias-ok{color:var(--txt2)}
+
+/* ── COUNTDOWN BAR ── */
+.cdbar{position:fixed;bottom:0;left:0;right:0;height:3px;background:var(--border);z-index:300}
+.cdfill{height:100%;background:var(--teal);transition:width 1s linear}
+
+/* ── FOOTER ── */
+footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
+
+/* ── PAGINATION ── */
+.pagebar{padding:10px 16px;display:flex;align-items:center;gap:8px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}
+.pagebar .pgbtn{height:28px;padding:0 10px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--txt2);font-size:11px;cursor:pointer;transition:all .15s}
+.pagebar .pgbtn:hover{border-color:var(--teal);color:var(--teal)}
+.pagebar .pgbtn.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+.pagebar .pgbtn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ── SCROLL ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1200px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.charts-row{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.charts-row{grid-template-columns:1fr}.bot-grid{grid-template-columns:1fr}.pb-stats{display:none}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="brand">
+    <div class="brand-dot"></div>
+    <div><div class="brand-name">AURORA</div><div class="brand-sub">BYD Pós-Vendas</div></div>
+  </div>
+  <div class="sep"></div>
+  <div class="hero-search">
+    <span class="ico">🔍</span>
+    <input type="text" id="hProcesso" list="dl-proc-h" placeholder="Buscar por Processo..." autocomplete="off">
+    <span class="hero-badge" id="heroBadge"></span>
+    <datalist id="dl-proc-h"></datalist>
+  </div>
+  <div class="hdr-actions">
+    <div class="upd-info">
+      <div class="upd-dot" id="updDot"></div>
+      <span id="updTime">Carregando...</span>
+    </div>
+    <div class="sep"></div>
+    <button class="btn btn-teal" id="btnRefresh" onclick="doRefresh()">↻ Atualizar</button>
+    <button class="btn" onclick="toggleTheme()">◐ Tema</button>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- PROCESSO BANNER -->
+  <div class="proc-banner" id="procBanner">
+    <div><div class="pb-label">Processo</div><div class="pb-value" id="pbVal">—</div></div>
+    <div class="pb-stats" id="pbStats"></div>
+    <button class="pb-close" onclick="clearFilters()" title="Limpar filtro">✕</button>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="fbar">
+    <div class="fg fg-processo">
+      <label>Processo ★</label>
+      <input class="fi" type="text" id="fProcesso" list="dl-proc" placeholder="Todos..." autocomplete="off">
+      <datalist id="dl-proc"></datalist>
+    </div>
+    <div class="fg">
+      <label>PN / Part Number</label>
+      <input class="fi" type="text" id="fPN" placeholder="Código...">
+    </div>
+    <div class="fg">
+      <label>Container</label>
+      <input class="fi" type="text" id="fContainer" placeholder="Container...">
+    </div>
+    <div class="fg">
+      <label>NF Entrada</label>
+      <input class="fi" type="text" id="fNFE" placeholder="Número NF...">
+    </div>
+    <div class="fg">
+      <label>Responsável</label>
+      <input class="fi" type="text" id="fResp" placeholder="Nome...">
+    </div>
+    <div class="fg" style="max-width:140px">
+      <label>Status</label>
+      <select class="fi" id="fStatus">
+        <option value="">Todos</option>
+        <option value="Em Aberto">Em Aberto</option>
+        <option value="Em Terceiros">Em Terceiros</option>
+        <option value="Retornado">Retornado</option>
+      </select>
+    </div>
+    <div class="fg" style="max-width:130px">
+      <label>Emissão De</label>
+      <input class="fi" type="date" id="fDtFrom">
+    </div>
+    <div class="fg" style="max-width:130px">
+      <label>Emissão Até</label>
+      <input class="fi" type="date" id="fDtTo">
+    </div>
+    <button class="fclear" onclick="clearFilters()">✕ Limpar</button>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-grid" id="kpiGrid">
+    <div style="grid-column:1/-1" class="loading"><span class="spin-ico">⟳</span> Carregando dados da planilha...</div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="charts-row">
+    <div class="card">
+      <div class="card-title">Status dos Itens</div>
+      <div class="chart-wrap" style="height:200px"><canvas id="cStatus"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Itens em Terceiros por Processo (Top 12)</div>
+      <div class="chart-wrap" style="height:200px"><canvas id="cProcesso"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Entradas por Mês</div>
+      <div class="chart-wrap" style="height:200px"><canvas id="cMes"></canvas></div>
+    </div>
+  </div>
+
+  <!-- TABLE: EM TERCEIROS (foco principal) -->
+  <div class="tcard">
+    <div class="thead-bar">
+      <div class="ttitle">📦 Estoque em Terceiros</div>
+      <div class="tcnt" id="cntTerceiros">0</div>
+      <div class="tval" id="valTerceiros"></div>
+      <div style="margin-left:8px;font-size:11px;color:var(--muted)" id="diasAlert"></div>
+    </div>
+    <div class="tscroll">
+      <table id="tTerceiros">
+        <thead><tr>
+          <th onclick="sortTable('tTerceiros',0)">Processo ↕</th>
+          <th onclick="sortTable('tTerceiros',1)">NF Entrada ↕</th>
+          <th onclick="sortTable('tTerceiros',2)">Container ↕</th>
+          <th onclick="sortTable('tTerceiros',3)">PN ↕</th>
+          <th>Descrição</th>
+          <th onclick="sortTable('tTerceiros',5)">Qtd ↕</th>
+          <th onclick="sortTable('tTerceiros',6)">NF Saída ↕</th>
+          <th onclick="sortTable('tTerceiros',7)">Data NF ↕</th>
+          <th onclick="sortTable('tTerceiros',8)">Dias Fora ↕</th>
+          <th>Responsável</th>
+          <th onclick="sortTable('tTerceiros',10)">Valor ↕</th>
+          <th>MIGO</th>
+        </tr></thead>
+        <tbody id="bTerceiros"><tr><td colspan="12" class="loading"><span class="spin-ico">⟳</span> Carregando...</td></tr></tbody>
+      </table>
+    </div>
+    <div class="pagebar" id="pageTerceiros"></div>
+  </div>
+
+  <!-- BOTTOM: Entradas + Devoluções -->
+  <div class="bot-grid">
+
+    <!-- ENTRADAS -->
+    <div class="tcard">
+      <div class="thead-bar">
+        <div class="ttitle">📥 Entradas de NF</div>
+        <div class="tcnt" id="cntEntrada">0</div>
+        <div class="tval" id="valEntrada"></div>
+      </div>
+      <div class="tscroll">
+        <table id="tEntrada">
+          <thead><tr>
+            <th onclick="sortTable('tEntrada',0)">Processo ↕</th>
+            <th onclick="sortTable('tEntrada',1)">NF Entrada ↕</th>
+            <th>Container</th>
+            <th>PN</th>
+            <th onclick="sortTable('tEntrada',4)">Qtd ↕</th>
+            <th onclick="sortTable('tEntrada',5)">Data Emissão ↕</th>
+            <th onclick="sortTable('tEntrada',6)">Valor ↕</th>
+            <th>Status</th>
+          </tr></thead>
+          <tbody id="bEntrada"><tr><td colspan="8" class="loading"><span class="spin-ico">⟳</span></td></tr></tbody>
+        </table>
+      </div>
+      <div class="pagebar" id="pageEntrada"></div>
+    </div>
+
+    <!-- DEVOLUÇÕES -->
+    <div class="tcard">
+      <div class="thead-bar">
+        <div class="ttitle">🔄 Devoluções / Retornos</div>
+        <div class="tcnt" id="cntDev">0</div>
+      </div>
+      <div class="tscroll">
+        <table id="tDev">
+          <thead><tr>
+            <th onclick="sortTable('tDev',0)">Processo ↕</th>
+            <th onclick="sortTable('tDev',1)">NF Retorno ↕</th>
+            <th>PN</th>
+            <th onclick="sortTable('tDev',3)">Qtd ↕</th>
+            <th onclick="sortTable('tDev',4)">Data Retorno ↕</th>
+            <th>MIGO</th>
+            <th>Responsável</th>
+            <th>Status Ret.</th>
+          </tr></thead>
+          <tbody id="bDev"><tr><td colspan="8" class="loading"><span class="spin-ico">⟳</span></td></tr></tbody>
+        </table>
+      </div>
+      <div class="pagebar" id="pageDev"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="cdbar"><div class="cdfill" id="cdFill" style="width:100%"></div></div>
+<footer>BYD Pós-Vendas · Aurora · Auto-refresh a cada 60s · <span id="totalReg">—</span></footer>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────────────────────
+const CSV_DIRECT = 'https://docs.google.com/spreadsheets/d/17ZclxoAJXJNw2ejkgS-dqFH1ZCFL1s4wkYtsNBgdi98/export?format=csv&gid=0';
+const PROXIES = [
+  u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+  u => 'https://corsproxy.io/?' + encodeURIComponent(u),
+  u => 'https://thingproxy.freeboard.io/fetch/' + u,
+  u => u
+];
+const INTERVAL = 60;
+const PAGE_SIZE = 50;
+
+let raw = [], filtered = [];
+let charts = {};
+let cdTimer = null, cdVal = INTERVAL;
+let sortState = {};
+let pages = { tTerceiros:0, tEntrada:0, tDev:0 };
+
+// ── THEME ────────────────────────────────────────────────────────────────────
+const savedTheme = localStorage.getItem('aurora-theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
+function toggleTheme(){
+  const d = document.documentElement;
+  const t = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  d.setAttribute('data-theme', t);
+  localStorage.setItem('aurora-theme', t);
+  setTimeout(rebuildCharts, 50);
+}
+
+// ── CSV PARSE ────────────────────────────────────────────────────────────────
+function parseCSVLine(line){
+  const r=[]; let q=false, cur='';
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(c==='"'){q=!q}
+    else if(c===','&&!q){r.push(cur.trim());cur=''}
+    else cur+=c;
+  }
+  r.push(cur.trim()); return r;
+}
+
+function parseCSV(text){
+  const lines = text.split('\n').map(l=>l.trimEnd()).filter(l=>l.length>0);
+  let hIdx = -1;
+  for(let i=0;i<Math.min(lines.length,8);i++){
+    const f = parseCSVLine(lines[i]);
+    // header row starts with "ID" and also has "PN" and "Processo"
+    if(f[0]==='ID' && f.some(x=>x==='PN') && f.some(x=>x==='Processo')){hIdx=i;break;}
+  }
+  if(hIdx===-1) return [];
+  const headers = parseCSVLine(lines[hIdx]);
+  const rows=[];
+  for(let i=hIdx+1;i<lines.length;i++){
+    const f=parseCSVLine(lines[i]);
+    if(f.length<5) continue;
+    const row={};
+    headers.forEach((h,j)=>{ row[h]=f[j]||''; });
+    if(!row['PN'] && !row['Processo']) continue;
+    rows.push(row);
+  }
+  return rows;
+}
+
+// ── DATA HELPERS ─────────────────────────────────────────────────────────────
+function parseDate(s){
+  if(!s||s.trim()==='') return null;
+  const p=s.trim().split('/');
+  if(p.length!==3) return null;
+  const d=+p[0],m=+p[1],y=+p[2];
+  if(isNaN(d)||isNaN(m)||isNaN(y)||y<1900) return null;
+  return new Date(y,m-1,d);
+}
+function parseNum(s){
+  if(!s||s.trim()==='') return 0;
+  return parseFloat(s.trim().replace(/\./g,'').replace(',','.')) || 0;
+}
+function fmtCur(n){
+  if(!n||isNaN(n)) return '—';
+  return 'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function fmtDate(s){
+  return (s&&s.trim()) ? s.trim() : '—';
+}
+function daysBetween(d1,d2){
+  if(!d1||!d2) return null;
+  return Math.round((d2-d1)/(864e5));
+}
+function getStatus(row){
+  const ns=(row['NF de Saída']||'').trim();
+  const nr=(row['NF Retorno']||'').trim();
+  if(ns==='') return 'Em Aberto';
+  if(nr==='') return 'Em Terceiros';
+  return 'Retornado';
+}
+function statusBadge(s){
+  const map={'Em Aberto':'<span class="badge br"><span class="b-dot" style="background:#DC2626"></span>Em Aberto</span>',
+  'Em Terceiros':'<span class="badge bo"><span class="b-dot" style="background:#D97706"></span>Em Terceiros</span>',
+  'Retornado':'<span class="badge bg"><span class="b-dot" style="background:#16A34A"></span>Retornado</span>'};
+  return map[s]||s;
+}
+
+// ── LOAD DATA ────────────────────────────────────────────────────────────────
+async function fetchCSV(){
+  const base = CSV_DIRECT + '&nocache=' + Date.now();
+  let lastErr = null;
+  for(const proxyFn of PROXIES){
+    const url = proxyFn(base);
+    try{
+      const r = await Promise.race([
+        fetch(url),
+        new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))
+      ]);
+      if(r.ok){
+        const txt = await r.text();
+        if(txt && txt.length > 200) return txt;
+      }
+    } catch(e){ lastErr = e; }
+  }
+  throw lastErr || new Error('Todos os proxies falharam');
+}
+
+async function loadData(){
+  setSpinner(true);
+  try{
+    const txt = await fetchCSV();
+    raw = parseCSV(txt);
+    const today = new Date();
+    raw.forEach(r=>{
+      r._status   = getStatus(r);
+      r._valor    = parseNum(r['Valor Total']);
+      r._dtEmit   = parseDate(r['Data Emissão']);
+      r._dtNF     = parseDate(r['Data NF']);
+      r._dtRet    = parseDate(r['Data retorno']);
+      r._diasFora = (r._status==='Em Terceiros' && r._dtNF) ? daysBetween(r._dtNF,today) : null;
+    });
+    populateDataLists();
+    document.getElementById('totalReg').textContent = raw.length+' registros carregados';
+    applyFilters();
+    setUpdTime();
+    resetCD();
+  } catch(e){
+    console.error(e);
+    document.getElementById('kpiGrid').innerHTML = `
+      <div style="grid-column:1/-1;padding:32px 24px;text-align:center;font-size:13px">
+        <div style="font-size:28px;margin-bottom:10px">📡</div>
+        <div style="font-weight:700;font-size:16px;color:var(--txt);margin-bottom:8px">Tentando carregar dados...</div>
+        <div style="color:var(--txt2);font-size:12px;line-height:1.9;margin-bottom:16px">
+          Tentamos <strong>4 fontes</strong> — todas bloqueadas neste ambiente de preview.<br>
+          O site funciona <strong>normalmente</strong> quando aberto em Chrome ou Edge:
+        </div>
+        <div style="display:inline-block;text-align:left;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 20px;font-size:12px;line-height:2;color:var(--txt2)">
+          1️⃣ Clique em <strong>↓ Baixar</strong> no canto superior do preview<br>
+          2️⃣ Salve o arquivo <code style="background:var(--border);padding:1px 5px;border-radius:3px">aurora_estoque.html</code><br>
+          3️⃣ Abra no <strong>Chrome</strong> ou <strong>Edge</strong> (duplo clique)<br>
+          4️⃣ Dados carregam em segundos ✓
+        </div>
+        <div style="margin-top:12px;padding:6px 12px;background:var(--surface2);border-radius:6px;font-size:10px;color:var(--muted);display:inline-block">
+          Erro técnico: ${e.message}
+        </div>
+      </div>`;
+  }
+  setSpinner(false);
+}
+
+function populateDataLists(){
+  const processos = [...new Set(raw.map(r=>r['Processo']).filter(Boolean))].sort();
+  ['dl-proc-h','dl-proc'].forEach(id=>{
+    document.getElementById(id).innerHTML = processos.map(p=>`<option value="${p}">`).join('');
+  });
+}
+
+function setSpinner(on){
+  document.getElementById('updDot').className='upd-dot'+(on?' spin':'');
+}
+function setUpdTime(){
+  const t=new Date();
+  document.getElementById('updTime').textContent='Atualizado às '+t.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+
+// ── FILTERS ──────────────────────────────────────────────────────────────────
+function applyFilters(){
+  const hp  = (document.getElementById('hProcesso').value||'').trim().toLowerCase();
+  const fp  = (document.getElementById('fProcesso').value||'').trim().toLowerCase();
+  const proc = hp||fp;
+  const pn  = (document.getElementById('fPN').value||'').trim().toLowerCase();
+  const ct  = (document.getElementById('fContainer').value||'').trim().toLowerCase();
+  const nfe = (document.getElementById('fNFE').value||'').trim().toLowerCase();
+  const re  = (document.getElementById('fResp').value||'').trim().toLowerCase();
+  const st  = document.getElementById('fStatus').value;
+  const df  = document.getElementById('fDtFrom').value;
+  const dt  = document.getElementById('fDtTo').value;
+
+  filtered = raw.filter(r=>{
+    if(proc && !(r['Processo']||'').toLowerCase().includes(proc)) return false;
+    if(pn   && !(r['PN']||'').toLowerCase().includes(pn)) return false;
+    if(ct   && !(r['Container']||'').toLowerCase().includes(ct)) return false;
+    if(nfe  && !(r['NF ENTRADA']||'').toLowerCase().includes(nfe)) return false;
+    if(re   && !((r['Responsável']||r['Responsável_4']||'')).toLowerCase().includes(re)) return false;
+    if(st   && r._status!==st) return false;
+    if(df && r._dtEmit && r._dtEmit < new Date(df)) return false;
+    if(dt && r._dtEmit){ const t2=new Date(dt); t2.setHours(23,59,59); if(r._dtEmit>t2) return false; }
+    return true;
+  });
+
+  // hero badge
+  const badge=document.getElementById('heroBadge');
+  if(proc){ badge.style.display='flex'; badge.textContent=filtered.length; }
+  else { badge.style.display='none'; }
+
+  // reset pagination
+  Object.keys(pages).forEach(k=>pages[k]=0);
+
+  updateBanner(proc);
+  renderKPIs();
+  renderCharts();
+  renderTables();
+}
+
+function updateBanner(proc){
+  const banner=document.getElementById('procBanner');
+  if(!proc){ banner.classList.remove('on'); return; }
+  banner.classList.add('on');
+  const displayProc = document.getElementById('hProcesso').value || document.getElementById('fProcesso').value;
+  document.getElementById('pbVal').textContent = displayProc;
+  const ab = filtered.filter(r=>r._status==='Em Aberto').length;
+  const tc = filtered.filter(r=>r._status==='Em Terceiros').length;
+  const rt = filtered.filter(r=>r._status==='Retornado').length;
+  const vl = filtered.reduce((s,r)=>s+r._valor,0);
+  document.getElementById('pbStats').innerHTML=`
+    <div class="pb-stat"><div class="pb-stat-v">${filtered.length}</div><div class="pb-stat-l">Total Itens</div></div>
+    <div class="pb-stat"><div class="pb-stat-v">${ab}</div><div class="pb-stat-l">Em Aberto</div></div>
+    <div class="pb-stat"><div class="pb-stat-v">${tc}</div><div class="pb-stat-l">Em Terceiros</div></div>
+    <div class="pb-stat"><div class="pb-stat-v">${rt}</div><div class="pb-stat-l">Retornados</div></div>
+    <div class="pb-stat"><div class="pb-stat-v">${fmtCur(vl)}</div><div class="pb-stat-l">Valor</div></div>`;
+}
+
+function clearFilters(){
+  ['fProcesso','fPN','fContainer','fNFE','fResp','fDtFrom','fDtTo'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fStatus').value='';
+  document.getElementById('hProcesso').value='';
+  document.getElementById('heroBadge').style.display='none';
+  applyFilters();
+}
+
+// sync header <-> filter bar
+document.getElementById('hProcesso').addEventListener('input',e=>{
+  document.getElementById('fProcesso').value=e.target.value; applyFilters();
+});
+document.getElementById('fProcesso').addEventListener('input',e=>{
+  document.getElementById('hProcesso').value=e.target.value; applyFilters();
+});
+['fPN','fContainer','fNFE','fResp','fStatus','fDtFrom','fDtTo'].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener('input',applyFilters);
+  el.addEventListener('change',applyFilters);
+});
+
+// ── KPIs ─────────────────────────────────────────────────────────────────────
+function renderKPIs(){
+  const n   = filtered.length;
+  const ab  = filtered.filter(r=>r._status==='Em Aberto').length;
+  const tc  = filtered.filter(r=>r._status==='Em Terceiros').length;
+  const rt  = filtered.filter(r=>r._status==='Retornado').length;
+  const val = filtered.reduce((s,r)=>s+r._valor,0);
+  const vtc = filtered.filter(r=>r._status==='Em Terceiros').reduce((s,r)=>s+r._valor,0);
+  const prt = n>0?rt/n:0;
+  const ptc = n>0?tc/n:0;
+  const today=new Date();
+  const diasArr=filtered.filter(r=>r._diasFora!==null).map(r=>r._diasFora);
+  const avgDias=diasArr.length>0?Math.round(diasArr.reduce((a,b)=>a+b,0)/diasArr.length):0;
+  const maxDias=diasArr.length>0?Math.max(...diasArr):0;
+
+  document.getElementById('kpiGrid').innerHTML=`
+    <div class="kpi"><div class="kpi-bar-top" style="background:var(--teal)"></div>
+      <div class="kpi-lbl">Total de Itens</div>
+      <div class="kpi-val">${n.toLocaleString('pt-BR')}</div>
+      <div class="kpi-sub">${fmtCur(val)}</div>
+    </div>
+    <div class="kpi"><div class="kpi-bar-top" style="background:var(--red)"></div>
+      <div class="kpi-lbl">Em Aberto</div>
+      <div class="kpi-val">${ab.toLocaleString('pt-BR')}</div>
+      <div class="kpi-sub">${(ab/Math.max(n,1)*100).toFixed(1)}% do total</div>
+      <div class="kpi-track"><div class="kpi-fill" style="width:${(ab/Math.max(n,1)*100).toFixed(1)}%;background:var(--red)"></div></div>
+    </div>
+    <div class="kpi"><div class="kpi-bar-top" style="background:var(--orange)"></div>
+      <div class="kpi-lbl">Em Terceiros</div>
+      <div class="kpi-val">${tc.toLocaleString('pt-BR')}</div>
+      <div class="kpi-sub">${fmtCur(vtc)}</div>
+      <div class="kpi-track"><div class="kpi-fill" style="width:${(ptc*100).toFixed(1)}%;background:var(--orange)"></div></div>
+    </div>
+    <div class="kpi"><div class="kpi-bar-top" style="background:var(--green)"></div>
+      <div class="kpi-lbl">Retornados</div>
+      <div class="kpi-val">${rt.toLocaleString('pt-BR')}</div>
+      <div class="kpi-sub">${(prt*100).toFixed(1)}% concluído</div>
+      <div class="kpi-track"><div class="kpi-fill" style="width:${(prt*100).toFixed(1)}%;background:var(--green)"></div></div>
+    </div>
+    <div class="kpi"><div class="kpi-bar-top" style="background:var(--blue)"></div>
+      <div class="kpi-lbl">Dias Médios Fora</div>
+      <div class="kpi-val">${avgDias}</div>
+      <div class="kpi-sub">Máx: ${maxDias}d · ${diasArr.length} itens</div>
+    </div>`;
+}
+
+// ── CHARTS ───────────────────────────────────────────────────────────────────
+function chartColors(){
+  const dk=document.documentElement.getAttribute('data-theme')==='dark';
+  return{text:dk?'#94A3B8':'#64748B',grid:dk?'#1E3A5F':'#E2E8F0'};
+}
+function rebuildCharts(){ if(filtered.length||raw.length) renderCharts(); }
+
+function renderCharts(){
+  const C=chartColors();
+  Chart.defaults.color=C.text;
+  Chart.defaults.font.family='Inter';
+  Chart.defaults.font.size=11;
+
+  // Donut status
+  const ab=filtered.filter(r=>r._status==='Em Aberto').length;
+  const tc=filtered.filter(r=>r._status==='Em Terceiros').length;
+  const rt=filtered.filter(r=>r._status==='Retornado').length;
+  if(charts.st) charts.st.destroy();
+  charts.st=new Chart(document.getElementById('cStatus'),{
+    type:'doughnut',
+    data:{labels:['Em Aberto','Em Terceiros','Retornado'],
+      datasets:[{data:[ab,tc,rt],backgroundColor:['#DC2626','#EA580C','#16A34A'],borderWidth:0,hoverOffset:5}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'65%',
+      plugins:{legend:{position:'bottom',labels:{padding:8,boxWidth:9,color:C.text}},
+        tooltip:{callbacks:{label:c=>` ${c.label}: ${c.raw} (${(c.raw/Math.max(filtered.length,1)*100).toFixed(1)}%)`}}}}
+  });
+
+  // Bar: processos em terceiros top 12
+  const pm={};
+  filtered.forEach(r=>{
+    const p=r['Processo']||'N/A';
+    if(!pm[p]) pm[p]={tc:0,rt:0,ab:0};
+    if(r._status==='Em Terceiros') pm[p].tc++;
+    else if(r._status==='Retornado') pm[p].rt++;
+    else pm[p].ab++;
+  });
+  const sorted=Object.entries(pm).sort((a,b)=>(b[1].tc+b[1].ab)-(a[1].tc+a[1].ab)).slice(0,12);
+  if(charts.pr) charts.pr.destroy();
+  charts.pr=new Chart(document.getElementById('cProcesso'),{
+    type:'bar',
+    data:{labels:sorted.map(([p])=>p),
+      datasets:[
+        {label:'Em Terceiros',data:sorted.map(([,v])=>v.tc),backgroundColor:'#EA580C',borderRadius:3,borderSkipped:false},
+        {label:'Em Aberto',data:sorted.map(([,v])=>v.ab),backgroundColor:'#DC2626',borderRadius:3,borderSkipped:false},
+        {label:'Retornado',data:sorted.map(([,v])=>v.rt),backgroundColor:'#16A34A',borderRadius:3,borderSkipped:false}
+      ]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{position:'bottom',labels:{padding:8,boxWidth:9,color:C.text}}},
+      scales:{x:{stacked:true,grid:{color:C.grid},ticks:{color:C.text}},
+              y:{stacked:true,grid:{display:false},ticks:{color:C.text}}}}
+  });
+
+  // Line: entradas por mês
+  const mm={};
+  filtered.forEach(r=>{
+    if(!r._dtEmit) return;
+    const k=`${r._dtEmit.getFullYear()}-${String(r._dtEmit.getMonth()+1).padStart(2,'0')}`;
+    mm[k]=(mm[k]||0)+1;
+  });
+  const months=Object.entries(mm).sort((a,b)=>a[0].localeCompare(b[0]));
+  if(charts.mn) charts.mn.destroy();
+  charts.mn=new Chart(document.getElementById('cMes'),{
+    type:'line',
+    data:{labels:months.map(([k])=>{const[y,m]=k.split('-');return new Date(+y,+m-1,1).toLocaleDateString('pt-BR',{month:'short',year:'2-digit'})}),
+      datasets:[{label:'Itens',data:months.map(([,v])=>v),
+        borderColor:'#0D9488',backgroundColor:'rgba(13,148,136,.12)',fill:true,tension:.3,pointRadius:3,pointBackgroundColor:'#0D9488'}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{color:C.grid},ticks:{color:C.text}},y:{grid:{color:C.grid},ticks:{color:C.text}}}}
+  });
+}
+
+// ── TABLES ───────────────────────────────────────────────────────────────────
+function renderTables(){
+  const today=new Date();
+
+  // Terceiros
+  const tc=filtered.filter(r=>r._status==='Em Terceiros')
+    .sort((a,b)=>(b._diasFora||0)-(a._diasFora||0)); // sort by dias fora desc
+  document.getElementById('cntTerceiros').textContent=tc.length;
+  const vtc=tc.reduce((s,r)=>s+r._valor,0);
+  document.getElementById('valTerceiros').textContent=vtc>0?fmtCur(vtc):'';
+  const criticos=tc.filter(r=>r._diasFora>60).length;
+  document.getElementById('diasAlert').textContent=criticos>0?`⚠ ${criticos} acima de 60 dias`:'';
+  renderPage('tTerceiros','bTerceiros','pageTerceiros',tc,rowTerceiros);
+
+  // Entradas
+  const ent=[...filtered].sort((a,b)=>(b._dtEmit||0)-(a._dtEmit||0));
+  document.getElementById('cntEntrada').textContent=ent.length;
+  const vEnt=ent.reduce((s,r)=>s+r._valor,0);
+  document.getElementById('valEntrada').textContent=vEnt>0?fmtCur(vEnt):'';
+  renderPage('tEntrada','bEntrada','pageEntrada',ent,rowEntrada);
+
+  // Devoluções
+  const dev=filtered.filter(r=>r._status==='Retornado')
+    .sort((a,b)=>(b._dtRet||0)-(a._dtRet||0));
+  document.getElementById('cntDev').textContent=dev.length;
+  renderPage('tDev','bDev','pageDev',dev,rowDev);
+}
+
+function rowTerceiros(r){
+  const d=r._diasFora;
+  const dc=d!==null?(d>60?`<span class="dias-warn">${d}d ⚠</span>`:d>30?`<span style="color:var(--orange);font-weight:600">${d}d</span>`:`<span class="dias-ok">${d}d</span>`):'—';
+  return `<tr>
+    <td><span class="ptag">${r['Processo']||'—'}</span></td>
+    <td>${r['NF ENTRADA']||'—'}</td>
+    <td>${r['Container']||'—'}</td>
+    <td style="font-weight:600">${r['PN']||'—'}</td>
+    <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis" title="${r['Descrição']||''}">${r['Descrição']||'—'}</td>
+    <td style="text-align:right">${r['Quantidade']||'—'}</td>
+    <td>${r['NF de Saída']||'—'}</td>
+    <td>${fmtDate(r['Data NF'])}</td>
+    <td style="text-align:center">${dc}</td>
+    <td>${r['Responsável']||'—'}</td>
+    <td style="text-align:right">${r._valor>0?fmtCur(r._valor):'—'}</td>
+    <td>${r['MIGO']||'—'}</td>
+  </tr>`;
+}
+
+function rowEntrada(r){
+  return `<tr>
+    <td><span class="ptag">${r['Processo']||'—'}</span></td>
+    <td>${r['NF ENTRADA']||'—'}</td>
+    <td>${r['Container']||'—'}</td>
+    <td style="font-weight:600">${r['PN']||'—'}</td>
+    <td style="text-align:right">${r['Quantidade']||'—'}</td>
+    <td>${fmtDate(r['Data Emissão'])}</td>
+    <td style="text-align:right">${r._valor>0?fmtCur(r._valor):'—'}</td>
+    <td>${statusBadge(r._status)}</td>
+  </tr>`;
+}
+
+function rowDev(r){
+  const sRet=(r['Status Retorno']||'').trim();
+  return `<tr>
+    <td><span class="ptag">${r['Processo']||'—'}</span></td>
+    <td>${r['NF Retorno']||'—'}</td>
+    <td style="font-weight:600">${r['PN']||'—'}</td>
+    <td style="text-align:right">${r['Quantidade']||'—'}</td>
+    <td>${fmtDate(r['Data retorno'])}</td>
+    <td>${r['MIGO_3']||'—'}</td>
+    <td>${r['Responsável_4']||r['Responsável']||'—'}</td>
+    <td>${sRet?`<span class="badge ${sRet==='Finalizado'?'bg':'bb'}">${sRet}</span>`:'—'}</td>
+  </tr>`;
+}
+
+// ── PAGINATION ───────────────────────────────────────────────────────────────
+function renderPage(tId,bId,pgId,data,rowFn){
+  const pg=pages[tId]||0;
+  const start=pg*PAGE_SIZE, end=start+PAGE_SIZE;
+  const slice=data.slice(start,end);
+  const tbody=document.getElementById(bId);
+
+  if(!data.length){ tbody.innerHTML=`<tr><td colspan="20" class="empty">Nenhum registro encontrado</td></tr>`; }
+  else tbody.innerHTML=slice.map(rowFn).join('');
+
+  // Pagination bar
+  const totalPgs=Math.ceil(data.length/PAGE_SIZE);
+  const pgBar=document.getElementById(pgId);
+  if(totalPgs<=1){ pgBar.innerHTML=''; return; }
+  let html=`<span style="flex:1">${data.length} registros · Página ${pg+1} de ${totalPgs}</span>`;
+  html+=`<button class="pgbtn" onclick="goPage('${tId}',${pg-1})" ${pg===0?'disabled':''}>‹ Ant</button>`;
+  const rangeStart=Math.max(0,pg-2), rangeEnd=Math.min(totalPgs-1,pg+2);
+  for(let i=rangeStart;i<=rangeEnd;i++){
+    html+=`<button class="pgbtn ${i===pg?'active':''}" onclick="goPage('${tId}',${i})">${i+1}</button>`;
+  }
+  html+=`<button class="pgbtn" onclick="goPage('${tId}',${pg+1})" ${pg>=totalPgs-1?'disabled':''}>Próx ›</button>`;
+  pgBar.innerHTML=html;
+}
+
+function goPage(tId,pg){
+  pages[tId]=pg;
+  applyFilters();
+  document.getElementById(tId).scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── SORT TABLES ───────────────────────────────────────────────────────────────
+function sortTable(tId,col){
+  // Simple sort based on current filtered display — rebuilds via applyFilters
+  // We'll implement simple toggle sort on visible data
+  const bodyId = 'b'+tId.replace('t','');
+  const rows=[...document.getElementById(bodyId+''.replace('b','b')).querySelectorAll('tr:not(.totrow)')];
+  const dir=(sortState[tId+col]||1)*-1;
+  sortState[tId+col]=dir;
+  rows.sort((a,b)=>{
+    const av=(a.cells[col]?.textContent||'').trim();
+    const bv=(b.cells[col]?.textContent||'').trim();
+    const an=parseFloat(av.replace(/[^\d,-]/g,'').replace(',','.'));
+    const bn=parseFloat(bv.replace(/[^\d,-]/g,'').replace(',','.'));
+    if(!isNaN(an)&&!isNaN(bn)) return (an-bn)*dir;
+    return av.localeCompare(bv,'pt-BR')*dir;
+  });
+  const tbody=document.getElementById('b'+tId.slice(1));
+  if(tbody) rows.forEach(r=>tbody.appendChild(r));
+}
+
+// ── COUNTDOWN ────────────────────────────────────────────────────────────────
+function resetCD(){
+  cdVal=INTERVAL;
+  if(cdTimer) clearInterval(cdTimer);
+  cdTimer=setInterval(()=>{
+    cdVal--;
+    document.getElementById('cdFill').style.width=(cdVal/INTERVAL*100)+'%';
+    if(cdVal<=0){ clearInterval(cdTimer); loadData(); }
+  },1000);
+}
+
+function doRefresh(){
+  if(cdTimer) clearInterval(cdTimer);
+  loadData();
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+loadData();
+</script>
+</body>
+</html>
