@@ -75,7 +75,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 .fclear:hover{border-color:var(--red);color:var(--red)}
 
 /* ── KPI GRID ── */
-.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
+.kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:16px}
 .kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh);position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s}
 .kpi:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
 .kpi-bar-top{position:absolute;top:0;left:0;width:100%;height:3px}
@@ -159,9 +159,9 @@ footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);bor
 <!-- HEADER -->
 <header class="hdr">
   <div class="brand">
-    <div style="display:flex;flex-direction:column;line-height:1">
-      <span style="font-size:22px;font-weight:900;letter-spacing:-.03em;color:#1D4ED8;font-family:'Inter',sans-serif">BYD</span>
-      <span style="font-size:10px;color:var(--muted);font-weight:500;letter-spacing:.02em;margin-top:1px">Estoque Aurora</span>
+    <div style="display:flex;flex-direction:column;gap:2px">
+      <img id="bydLogo" src="data:image/png;base64,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" alt="BYD" style="height:22px;width:auto;object-fit:contain;transition:filter .2s">
+      <span style="font-size:10px;color:var(--muted);font-weight:500;letter-spacing:.03em">Estoque Aurora</span>
     </div>
   </div>
   <div class="sep"></div>
@@ -240,7 +240,7 @@ footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);bor
   </div>
 
   <!-- CHARTS -->
-  <div class="charts-row">
+  <div class="charts-row" style="grid-template-columns:240px 1fr 1fr">
     <div class="card">
       <div class="card-title">Status dos Processos</div>
       <div class="chart-wrap" style="height:200px"><canvas id="cStatus"></canvas></div>
@@ -253,6 +253,11 @@ footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);bor
       <div class="card-title">Entradas por Mês (var. %)</div>
       <div class="chart-wrap" style="height:200px"><canvas id="cMes"></canvas></div>
     </div>
+  </div>
+  <!-- RANKING CHART -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">🏆 Ranking de Processos por Valor (Top 10)</div>
+    <div class="chart-wrap" style="height:280px"><canvas id="cRanking"></canvas></div>
   </div>
 
   <!-- TABLE: EM TERCEIROS (foco principal) -->
@@ -367,8 +372,14 @@ function toggleTheme(){
   const t = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
   d.setAttribute('data-theme', t);
   localStorage.setItem('aurora-theme', t);
+  applyLogoTheme(t);
   setTimeout(rebuildCharts, 50);
 }
+function applyLogoTheme(t){
+  const logo=document.getElementById('bydLogo');
+  if(logo) logo.style.filter = t==='dark' ? 'brightness(0) invert(1)' : 'none';
+}
+applyLogoTheme(savedTheme);
 
 // ── CSV PARSE ────────────────────────────────────────────────────────────────
 function parseCSVLine(line){
@@ -599,45 +610,52 @@ document.getElementById('fProcesso').addEventListener('input',e=>{
 
 // ── KPIs ─────────────────────────────────────────────────────────────────────
 function renderKPIs(){
-  const n   = filtered.length;
-  const ab  = filtered.filter(r=>r._status==='Em Aberto').length;
-  const tc  = filtered.filter(r=>r._status==='Em Terceiros').length;
-  const rt  = filtered.filter(r=>r._status==='Retornado').length;
-  const val = filtered.reduce((s,r)=>s+r._valor,0);
-  const vtc = filtered.filter(r=>r._status==='Em Terceiros').reduce((s,r)=>s+r._valor,0);
-  const prt = n>0?rt/n:0;
-  const ptc = n>0?tc/n:0;
-  const today=new Date();
-  const diasArr=filtered.filter(r=>r._diasFora!==null).map(r=>r._diasFora);
-  const avgDias=diasArr.length>0?Math.round(diasArr.reduce((a,b)=>a+b,0)/diasArr.length):0;
-  const maxDias=diasArr.length>0?Math.max(...diasArr):0;
+  const today = new Date();
+  // Processos distintos
+  const totalProcs = new Set(filtered.map(r=>r['Processo']).filter(Boolean)).size;
+  const procsTc    = new Set(filtered.filter(r=>r._status==='Em Terceiros').map(r=>r['Processo']).filter(Boolean)).size;
+  const procsRt    = new Set(filtered.filter(r=>r._status==='Retornado').map(r=>r['Processo']).filter(Boolean)).size;
+  // Itens
+  const aguardando = filtered.filter(r=>r._status==='Em Aberto').length;
+  const vtc        = filtered.filter(r=>r._status==='Em Terceiros').reduce((s,r)=>s+r._valor,0);
+  // Dias médios em terceiros (por item)
+  const diasArr    = filtered.filter(r=>r._diasFora!==null&&r._diasFora>=0).map(r=>r._diasFora);
+  const avgDias    = diasArr.length>0?Math.round(diasArr.reduce((a,b)=>a+b,0)/diasArr.length):0;
+  const maxDias    = diasArr.length>0?Math.max(...diasArr):0;
+  const prt        = totalProcs>0?(procsRt/totalProcs):0;
+  const ptc        = totalProcs>0?(procsTc/totalProcs):0;
 
   document.getElementById('kpiGrid').innerHTML=`
-    <div class="kpi"><div class="kpi-bar-top" style="background:var(--teal)"></div>
-      <div class="kpi-lbl">Total de Itens</div>
-      <div class="kpi-val">${n.toLocaleString('pt-BR')}</div>
-      <div class="kpi-sub">${fmtCur(val)}</div>
+    <div class="kpi"><div class="kpi-bar-top" style="background:#16A34A"></div>
+      <div class="kpi-lbl">Total de Processos</div>
+      <div class="kpi-val">${totalProcs.toLocaleString('pt-BR')}</div>
+      <div class="kpi-sub">${filtered.length.toLocaleString('pt-BR')} itens</div>
     </div>
-    <div class="kpi"><div class="kpi-bar-top" style="background:var(--red)"></div>
-      <div class="kpi-lbl">Em Aberto</div>
-      <div class="kpi-val">${ab.toLocaleString('pt-BR')}</div>
-      <div class="kpi-sub">${(ab/Math.max(n,1)*100).toFixed(1)}% do total</div>
-      <div class="kpi-track"><div class="kpi-fill" style="width:${(ab/Math.max(n,1)*100).toFixed(1)}%;background:var(--red)"></div></div>
+    <div class="kpi"><div class="kpi-bar-top" style="background:#EAB308"></div>
+      <div class="kpi-lbl">Aguardando Entrada</div>
+      <div class="kpi-val">${aguardando.toLocaleString('pt-BR')}</div>
+      <div class="kpi-sub">itens sem NF de Saída</div>
+      <div class="kpi-track"><div class="kpi-fill" style="width:${(aguardando/Math.max(filtered.length,1)*100).toFixed(1)}%;background:#EAB308"></div></div>
     </div>
-    <div class="kpi"><div class="kpi-bar-top" style="background:var(--orange)"></div>
+    <div class="kpi"><div class="kpi-bar-top" style="background:#0EA5E9"></div>
       <div class="kpi-lbl">Em Terceiros</div>
-      <div class="kpi-val">${tc.toLocaleString('pt-BR')}</div>
-      <div class="kpi-sub">${fmtCur(vtc)}</div>
-      <div class="kpi-track"><div class="kpi-fill" style="width:${(ptc*100).toFixed(1)}%;background:var(--orange)"></div></div>
+      <div class="kpi-val">${procsTc.toLocaleString('pt-BR')}</div>
+      <div class="kpi-sub">processos distintos</div>
+      <div class="kpi-track"><div class="kpi-fill" style="width:${(ptc*100).toFixed(1)}%;background:#0EA5E9"></div></div>
     </div>
-    <div class="kpi"><div class="kpi-bar-top" style="background:var(--green)"></div>
+    <div class="kpi"><div class="kpi-bar-top" style="background:#16A34A"></div>
       <div class="kpi-lbl">Retornados</div>
-      <div class="kpi-val">${rt.toLocaleString('pt-BR')}</div>
-      <div class="kpi-sub">${(prt*100).toFixed(1)}% concluído</div>
-      <div class="kpi-track"><div class="kpi-fill" style="width:${(prt*100).toFixed(1)}%;background:var(--green)"></div></div>
+      <div class="kpi-val">${procsRt.toLocaleString('pt-BR')}</div>
+      <div class="kpi-sub">${(prt*100).toFixed(1)}% dos processos</div>
+      <div class="kpi-track"><div class="kpi-fill" style="width:${(prt*100).toFixed(1)}%;background:#16A34A"></div></div>
+    </div>
+    <div class="kpi"><div class="kpi-bar-top" style="background:#0EA5E9"></div>
+      <div class="kpi-lbl">Valor em Terceiros</div>
+      <div class="kpi-val" style="font-size:18px">${fmtCur(vtc)}</div>
+      <div class="kpi-sub">${procsTc} processos</div>
     </div>
     <div class="kpi"><div class="kpi-bar-top" style="background:var(--blue)"></div>
-      <div class="kpi-lbl">Dias Médios Fora</div>
+      <div class="kpi-lbl">Dias Méd. em Terceiros</div>
       <div class="kpi-val">${avgDias}</div>
       <div class="kpi-sub">Máx: ${maxDias}d · ${diasArr.length} itens</div>
     </div>`;
@@ -655,12 +673,11 @@ function renderCharts(){
   Chart.defaults.color=C.text;
   Chart.defaults.font.family='Inter';
   Chart.defaults.font.size=11;
-
-  // Registra plugin datalabels globalmente
   if(window.ChartDataLabels) Chart.register(ChartDataLabels);
 
   // ── Classificar processos por status ──────────────────────────────────
   const pm={};
+  const pvMap={}; // processo -> valor total
   filtered.forEach(r=>{
     const p=r['Processo']||'N/A';
     if(!pm[p]) pm[p]={tc:0,rt:0,ab:0,total:0};
@@ -668,9 +685,9 @@ function renderCharts(){
     if(r._status==='Em Terceiros') pm[p].tc++;
     else if(r._status==='Retornado') pm[p].rt++;
     else pm[p].ab++;
+    pvMap[p]=(pvMap[p]||0)+r._valor;
   });
 
-  // Status do processo: Em Aberto > Em Terceiros > Retornado (prioridade)
   let procAb=0,procTc=0,procRt=0;
   Object.values(pm).forEach(v=>{
     if(v.ab>0) procAb++;
@@ -679,7 +696,7 @@ function renderCharts(){
   });
   const totalProc=procAb+procTc+procRt||1;
 
-  // ── Donut: QUANTIDADE DE PROCESSOS ────────────────────────────────────
+  // ── Donut: STATUS DOS PROCESSOS ────────────────────────────────────────
   if(charts.st) charts.st.destroy();
   charts.st=new Chart(document.getElementById('cStatus'),{
     type:'doughnut',
@@ -687,10 +704,8 @@ function renderCharts(){
       labels:['Aguard. Entrada NF','Em Terceiros','Retornado'],
       datasets:[{
         data:[procAb,procTc,procRt],
-        backgroundColor:['#EAB308','#0F172A','#0D9488'],
-        borderWidth:2,
-        borderColor:'transparent',
-        hoverOffset:6
+        backgroundColor:['#EAB308','#0EA5E9','#16A34A'],
+        borderWidth:2,borderColor:'transparent',hoverOffset:6
       }]
     },
     options:{
@@ -698,52 +713,33 @@ function renderCharts(){
       plugins:{
         legend:{position:'bottom',labels:{padding:8,boxWidth:9,color:C.text}},
         tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${ctx.raw} processos (${(ctx.raw/totalProc*100).toFixed(1)}%)`}},
-        datalabels:{
-          color:'#fff',
-          font:{weight:'700',size:12},
-          formatter:(v)=>v>0?v:'',
-          textShadowBlur:3,
-          textShadowColor:'rgba(0,0,0,.4)'
-        }
+        datalabels:{color:'#fff',font:{weight:'700',size:12},formatter:(v)=>v>0?v:'',textShadowBlur:3,textShadowColor:'rgba(0,0,0,.4)'}
       }
     }
   });
 
-  // ── Bar: TODOS os processos com qtde de itens ─────────────────────────
+  // ── Bar: TOP 10 PROCESSOS por qtde de itens ────────────────────────────
   const allProc=Object.entries(pm).sort((a,b)=>b[1].total-a[1].total).slice(0,10);
-  const barH=Math.max(220, allProc.length*30+40);
+  const barH=Math.max(240,allProc.length*30+40);
   const wrap=document.getElementById('wrapProcesso');
   if(wrap) wrap.style.height=barH+'px';
-
-  const procLabels=allProc.map(([p])=>p);
-  const procTotals=allProc.map(([,v])=>v.total);
-  const procColors=allProc.map(([,v])=>v.ab>0?'#EAB308':v.tc>0?'#0F172A':'#16A34A');
-
   if(charts.pr) charts.pr.destroy();
   charts.pr=new Chart(document.getElementById('cProcesso'),{
     type:'bar',
     data:{
-      labels:procLabels,
+      labels:allProc.map(([p])=>p),
       datasets:[{
         label:'Itens',
-        data:procTotals,
-        backgroundColor:procColors,
-        borderRadius:4,
-        borderSkipped:false
+        data:allProc.map(([,v])=>v.total),
+        backgroundColor:allProc.map(([,v])=>v.ab>0?'#EAB308':v.tc>0?'#0EA5E9':'#16A34A'),
+        borderRadius:4,borderSkipped:false
       }]
     },
     options:{
       responsive:true,maintainAspectRatio:false,indexAxis:'y',
       plugins:{
         legend:{display:false},
-        datalabels:{
-          anchor:'end',
-          align:'end',
-          color:C.text,
-          font:{weight:'700',size:11},
-          formatter:(v)=>v,
-          padding:{left:4}
-        }
+        datalabels:{anchor:'end',align:'end',color:C.text,font:{weight:'700',size:11},formatter:(v)=>v,padding:{left:4}}
       },
       scales:{
         x:{grid:{display:false},border:{display:false},ticks:{color:C.text}},
@@ -753,7 +749,7 @@ function renderCharts(){
     }
   });
 
-  // ── Line: Entradas por mês com variação % ─────────────────────────────
+  // ── Line: Entradas por mês com variação % + sem eixo Y ─────────────────
   const mm={};
   filtered.forEach(r=>{
     if(!r._dtEmit) return;
@@ -762,35 +758,84 @@ function renderCharts(){
   });
   const months=Object.entries(mm).sort((a,b)=>a[0].localeCompare(b[0]));
   const vals=months.map(([,v])=>v);
-
   if(charts.mn) charts.mn.destroy();
   charts.mn=new Chart(document.getElementById('cMes'),{
     type:'line',
     data:{
       labels:months.map(([k])=>{const[y,m]=k.split('-');return new Date(+y,+m-1,1).toLocaleDateString('pt-BR',{month:'short',year:'2-digit'})}),
       datasets:[{
-        label:'Itens',
         data:vals,
-        borderColor:'#0D9488',
-        backgroundColor:'rgba(13,148,136,.12)',
-        fill:true,
-        tension:.3,
-        pointRadius:3,
-        pointBackgroundColor:'#0D9488',
-        pointBorderColor:'transparent',
-        pointBorderWidth:0
+        borderColor:'#16A34A',
+        backgroundColor:'rgba(22,163,74,.1)',
+        fill:true,tension:.3,
+        pointRadius:4,pointBackgroundColor:'#16A34A',
+        pointBorderColor:'var(--surface)',pointBorderWidth:2
       }]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
       plugins:{
         legend:{display:false},
-        datalabels:{display:false}
+        datalabels:{
+          anchor:'top',align:'top',offset:5,
+          font:{weight:'600',size:10},
+          color:(ctx)=>{
+            const i=ctx.dataIndex;
+            if(i===0) return C.text;
+            return vals[i]>=vals[i-1]?'#16A34A':'#DC2626';
+          },
+          formatter:(v,ctx)=>{
+            const i=ctx.dataIndex;
+            if(i===0) return v;
+            const prev=vals[i-1];
+            if(!prev) return v;
+            const pct=((v-prev)/prev*100).toFixed(0);
+            return v+'\n'+(pct>=0?'+':'')+pct+'%';
+          }
+        }
       },
       scales:{
         x:{grid:{display:false},border:{display:false},ticks:{color:C.text}},
+        y:{display:false}
+      },
+      layout:{padding:{top:30}}
+    }
+  });
+
+  // ── Bar: RANKING por VALOR (Top 10) ────────────────────────────────────
+  const rankProc=Object.entries(pvMap)
+    .sort((a,b)=>b[1]-a[1]).slice(0,10);
+  if(charts.rk) charts.rk.destroy();
+  charts.rk=new Chart(document.getElementById('cRanking'),{
+    type:'bar',
+    data:{
+      labels:rankProc.map(([p])=>p),
+      datasets:[{
+        data:rankProc.map(([,v])=>v),
+        backgroundColor:rankProc.map(([p])=>{
+          const v=pm[p];
+          if(!v) return '#16A34A';
+          return v.ab>0?'#EAB308':v.tc>0?'#0EA5E9':'#16A34A';
+        }),
+        borderRadius:4,borderSkipped:false
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{
+        legend:{display:false},
+        datalabels:{
+          anchor:'end',align:'end',
+          color:C.text,font:{weight:'600',size:10},
+          formatter:(v)=>'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0}),
+          padding:{left:4}
+        }
+      },
+      scales:{
+        x:{grid:{display:false},border:{display:false},ticks:{display:false}},
         y:{grid:{display:false},border:{display:false},ticks:{color:C.text}}
-      }
+      },
+      layout:{padding:{right:130}}
     }
   });
 }
