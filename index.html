@@ -339,12 +339,7 @@ footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);bor
 
 <script>
 const CSV_DIRECT = 'https://docs.google.com/spreadsheets/d/17ZclxoAJXJNw2ejkgS-dqFH1ZCFL1s4wkYtsNBgdi98/export?format=csv&gid=0';
-const PROXIES = [
-  u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
-  u => 'https://corsproxy.io/?' + encodeURIComponent(u),
-  u => 'https://thingproxy.freeboard.io/fetch/' + u,
-  u => u
-];
+
 const PAGE_SIZE = 50;
 
 let raw = [], filtered = [];
@@ -442,22 +437,27 @@ function statusBadge(s){
 }
 
 async function fetchCSV(){
-  const base = CSV_DIRECT + '&nocache=' + Date.now();
+  const url = CSV_DIRECT + '&nocache=' + Date.now();
+  const proxies = [
+    url,
+    'https://api.allorigins.win/raw?url=' + encodeURIComponent(CSV_DIRECT),
+    'https://corsproxy.io/?' + encodeURIComponent(CSV_DIRECT),
+    'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(CSV_DIRECT)
+  ];
   let lastErr = null;
-  for(const proxyFn of PROXIES){
-    const url = proxyFn(base);
+  for(const u of proxies){
     try{
       const r = await Promise.race([
-        fetch(url),
-        new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))
+        fetch(u, {cache:'no-store'}),
+        new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),10000))
       ]);
       if(r.ok){
         const txt = await r.text();
-        if(txt && txt.length > 200) return txt;
+        if(txt && txt.length > 200 && txt.includes('Processo')) return txt;
       }
     } catch(e){ lastErr = e; }
   }
-  throw lastErr || new Error('Todos os proxies falharam');
+  throw lastErr || new Error('Falha ao carregar dados');
 }
 
 async function loadData(){
