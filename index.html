@@ -25,7 +25,6 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;transition:background .2s,color .2s}
 
-/* ── HEADER ── */
 .hdr{background:var(--surface);border-bottom:1px solid var(--border);height:70px;display:flex;align-items:center;gap:14px;padding:0 20px;position:sticky;top:0;z-index:200;box-shadow:var(--sh)}
 .brand{display:flex;align-items:center;gap:9px;flex-shrink:0}
 .brand-dot{width:8px;height:8px;border-radius:50%;background:var(--teal)}
@@ -48,10 +47,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 .btn-teal:hover{background:var(--teal-dk);border-color:var(--teal-dk);color:#fff}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 
-/* ── MAIN ── */
 .main{padding:18px 20px 60px;max-width:1700px;margin:0 auto}
 
-/* ── PROCESSO BANNER ── */
 .proc-banner{background:linear-gradient(120deg,var(--teal) 0%,var(--teal-dk) 100%);border-radius:var(--r);padding:14px 20px;margin-bottom:16px;display:none;align-items:center;gap:20px;color:#fff}
 .proc-banner.on{display:flex}
 .pb-label{font-size:10px;font-weight:600;opacity:.75;text-transform:uppercase;letter-spacing:.06em}
@@ -63,7 +60,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 .pb-close{background:rgba(255,255,255,.15);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
 .pb-close:hover{background:rgba(255,255,255,.3)}
 
-/* ── FILTER BAR ── */
 .fbar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:16px;box-shadow:var(--sh)}
 .fg{display:flex;flex-direction:column;gap:3px;flex:1;min-width:110px;max-width:200px}
 .fg label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
@@ -74,7 +70,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 .fclear{height:30px;padding:0 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;align-self:flex-end}
 .fclear:hover{border-color:var(--red);color:var(--red)}
 
-/* ── KPI GRID ── */
 .kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:16px}
 .kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh);position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s}
 .kpi:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
@@ -85,13 +80,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 .kpi-track{height:3px;background:var(--border);border-radius:2px;margin-top:10px;overflow:hidden}
 .kpi-fill{height:100%;border-radius:2px;transition:width .6s ease}
 
-/* ── CHARTS ── */
 .charts-row{display:grid;grid-template-columns:260px 1fr 1fr;gap:12px;margin-bottom:16px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--sh)}
 .card-title{font-size:11px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
 .chart-wrap{position:relative}
 
-/* ── TABLE CARD ── */
 .tcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:16px;overflow:hidden}
 .thead-bar{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
 .thead-bar .ttitle{font-size:13px;font-weight:600}
@@ -113,10 +106,8 @@ tbody td{padding:8px 12px;color:var(--txt);white-space:nowrap}
 .spin-ico{display:inline-block;animation:rotate 1s linear infinite}
 @keyframes rotate{to{transform:rotate(360deg)}}
 
-/* ── BOTTOM GRID ── */
 .bot-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-/* ── BADGES ── */
 .badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;white-space:nowrap}
 .b-dot{width:5px;height:5px;border-radius:50%}
 .bg{background:#DCFCE7;color:#15803D}
@@ -132,24 +123,18 @@ tbody td{padding:8px 12px;color:var(--txt);white-space:nowrap}
 .dias-warn{color:var(--red);font-weight:700}
 .dias-ok{color:var(--txt2)}
 
-/* ── COUNTDOWN BAR ── */
-
-/* ── FOOTER ── */
 footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
 
-/* ── PAGINATION ── */
 .pagebar{padding:10px 16px;display:flex;align-items:center;gap:8px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}
 .pagebar .pgbtn{height:28px;padding:0 10px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--txt2);font-size:11px;cursor:pointer;transition:all .15s}
 .pagebar .pgbtn:hover{border-color:var(--teal);color:var(--teal)}
 .pagebar .pgbtn.active{background:var(--teal);color:#fff;border-color:var(--teal)}
 .pagebar .pgbtn:disabled{opacity:.4;cursor:not-allowed}
 
-/* ── SCROLL ── */
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
-/* ── RESPONSIVE ── */
 @media(max-width:1200px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.charts-row{grid-template-columns:1fr 1fr}}
 @media(max-width:768px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.charts-row{grid-template-columns:1fr}.bot-grid{grid-template-columns:1fr}.pb-stats{display:none}}
 </style>
@@ -353,7 +338,6 @@ footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);bor
 <footer>BYD Pós-Vendas · Aurora · <span id="totalReg">—</span></footer>
 
 <script>
-// ── CONFIG ──────────────────────────────────────────────────────────────────
 const CSV_DIRECT = 'https://docs.google.com/spreadsheets/d/17ZclxoAJXJNw2ejkgS-dqFH1ZCFL1s4wkYtsNBgdi98/export?format=csv&gid=0';
 const PROXIES = [
   u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
@@ -369,7 +353,6 @@ let cdTimer = null;
 let sortState = {};
 let pages = { tTerceiros:0, tEntrada:0, tDev:0 };
 
-// ── THEME ────────────────────────────────────────────────────────────────────
 const savedTheme = localStorage.getItem('aurora-theme') || 'light';
 document.documentElement.setAttribute('data-theme', savedTheme);
 function toggleTheme(){
@@ -387,10 +370,8 @@ function applyLogoTheme(t){
 }
 applyLogoTheme(savedTheme);
 
-
 }
 
-// ── CSV PARSE ────────────────────────────────────────────────────────────────
 function parseCSVLine(line){
   const r=[]; let q=false, cur='';
   for(let i=0;i<line.length;i++){
@@ -407,7 +388,6 @@ function parseCSV(text){
   let hIdx = -1;
   for(let i=0;i<Math.min(lines.length,8);i++){
     const f = parseCSVLine(lines[i]);
-    // header row starts with "ID" and also has "PN" and "Processo"
     if(f[0]==='ID' && f.some(x=>x==='PN') && f.some(x=>x==='Processo')){hIdx=i;break;}
   }
   if(hIdx===-1) return [];
@@ -424,7 +404,6 @@ function parseCSV(text){
   return rows;
 }
 
-// ── DATA HELPERS ─────────────────────────────────────────────────────────────
 function parseDate(s){
   if(!s||s.trim()==='') return null;
   const p=s.trim().split('/');
@@ -462,7 +441,6 @@ function statusBadge(s){
   return map[s]||s;
 }
 
-// ── LOAD DATA ────────────────────────────────────────────────────────────────
 async function fetchCSV(){
   const base = CSV_DIRECT + '&nocache=' + Date.now();
   let lastErr = null;
@@ -539,7 +517,6 @@ function setUpdTime(){
   document.getElementById('updTime').textContent='Atualizado às '+t.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 }
 
-// ── FILTERS ──────────────────────────────────────────────────────────────────
 function applyFilters(){
   const hp  = (document.getElementById('hProcesso').value||'').trim().toLowerCase();
   const fp  = (document.getElementById('fProcesso').value||'').trim().toLowerCase();
@@ -564,12 +541,10 @@ function applyFilters(){
     return true;
   });
 
-  // hero badge
   const badge=document.getElementById('heroBadge');
   if(proc){ badge.style.display='flex'; badge.textContent=filtered.length; }
   else { badge.style.display='none'; }
 
-  // reset pagination
   Object.keys(pages).forEach(k=>pages[k]=0);
 
   updateBanner(proc);
@@ -604,7 +579,6 @@ function clearFilters(){
   applyFilters();
 }
 
-// sync header <-> filter bar
 document.getElementById('hProcesso').addEventListener('input',e=>{
   document.getElementById('fProcesso').value=e.target.value; applyFilters();
 });
@@ -617,15 +591,11 @@ document.getElementById('fProcesso').addEventListener('input',e=>{
   el.addEventListener('change',applyFilters);
 });
 
-// ── KPIs ─────────────────────────────────────────────────────────────────────
 function renderKPIs(){
   const today = new Date();
-  // Processos distintos
   const totalProcs = new Set(filtered.map(r=>r['Processo']).filter(Boolean)).size;
   const procsTc    = new Set(filtered.filter(r=>r._status==='Em Terceiros').map(r=>r['Processo']).filter(Boolean)).size;
   const procsRt    = new Set(filtered.filter(r=>r._status==='Retornado').map(r=>r['Processo']).filter(Boolean)).size;
-  // Itens
-  // Agrupar itens por processo para calcular aguardando (processos, nao itens)
   const _pmKpi = {};
   filtered.forEach(r=>{
     const p=r['Processo']||'N/A';
@@ -640,7 +610,6 @@ function renderKPIs(){
   const procsRt    = Object.values(_pmKpi).filter(v=>v.rt===v.total&&v.total>0).length;
   const aguardando = Object.values(_pmKpi).filter(v=>v.ab>0).length;
   const vtc        = filtered.filter(r=>r._status==='Em Terceiros').reduce((s,r)=>s+r._valor,0);
-  // Dias médios em terceiros (por item)
   const diasArr    = filtered.filter(r=>r._diasFora!==null&&r._diasFora>=0).map(r=>r._diasFora);
   const avgDias    = diasArr.length>0?Math.round(diasArr.reduce((a,b)=>a+b,0)/diasArr.length):0;
   const maxDias    = diasArr.length>0?Math.max(...diasArr):0;
@@ -683,7 +652,6 @@ function renderKPIs(){
     </div>`;
 }
 
-// ── CHARTS ───────────────────────────────────────────────────────────────────
 function chartColors(){
   const dk=document.documentElement.getAttribute('data-theme')==='dark';
   return{text:dk?'#94A3B8':'#64748B',grid:dk?'#1E3A5F':'#E2E8F0'};
@@ -697,7 +665,6 @@ function renderCharts(){
   Chart.defaults.font.size=11;
   if(window.ChartDataLabels) Chart.register(ChartDataLabels);
 
-  // ── Classificar processos por status ──────────────────────────────────
   const pm={};
   const pvMap={}; // processo -> valor total
   filtered.forEach(r=>{
@@ -718,7 +685,6 @@ function renderCharts(){
   });
   const totalProc=procAb+procTc+procRt||1;
 
-  // ── Donut: STATUS DOS PROCESSOS ────────────────────────────────────────
   if(charts.st) charts.st.destroy();
   charts.st=new Chart(document.getElementById('cStatus'),{
     type:'doughnut',
@@ -740,7 +706,6 @@ function renderCharts(){
     }
   });
 
-  // ── Bar: TOP 10 PROCESSOS por qtde de itens ────────────────────────────
   const allProc=Object.entries(pm).sort((a,b)=>b[1].total-a[1].total).slice(0,8);
   const barH=Math.max(240,allProc.length*30+40);
   const wrap=document.getElementById('wrapProcesso');
@@ -771,13 +736,11 @@ function renderCharts(){
     }
   });
 
-  // ── Line: Valor em terceiros por mês — todos os meses desde o início ───────
   const _mmRaw={};
   raw.filter(r=>r._status==='Em Terceiros'&&r._dtNF).forEach(r=>{
     const k=`${r._dtNF.getFullYear()}-${String(r._dtNF.getMonth()+1).padStart(2,'0')}`;
     _mmRaw[k]=(_mmRaw[k]||0)+r._valor;
   });
-  // Gera sequência completa de meses do primeiro ao atual
   const _allDates=raw.filter(r=>r._dtNF).map(r=>r._dtNF);
   const _minDate=_allDates.length?new Date(Math.min(..._allDates)):new Date();
   const _now=new Date();
@@ -831,7 +794,6 @@ function renderCharts(){
     }
   });
 
-  // ── Bar: RANKING por VALOR em TERCEIROS (Top 10) ────────────────────────
   const tcItems=filtered.filter(r=>r._status==='Em Terceiros');
   const pvTcMap={};
   const pqTcMap={};
@@ -871,7 +833,6 @@ function renderCharts(){
     }
   });
 
-  // ── Column: RANKING por QTD de itens em TERCEIROS (Top 10) ───────────────
   const rankQtd=Object.entries(pqTcMap).sort((a,b)=>b[1]-a[1]).slice(0,10);
   if(charts.cl) charts.cl.destroy();
   charts.cl=new Chart(document.getElementById('cColuna'),{
@@ -903,11 +864,9 @@ function renderCharts(){
   });
 }
 
-// ── TABLES ───────────────────────────────────────────────────────────────────
 function renderTables(){
   const today=new Date();
 
-  // Terceiros — ordenado por PN crescente
   const tc=filtered.filter(r=>r._status==='Em Terceiros')
     .sort((a,b)=>(a['PN']||'').localeCompare(b['PN']||'','pt-BR'));
   document.getElementById('cntTerceiros').textContent=tc.length;
@@ -917,14 +876,12 @@ function renderTables(){
   document.getElementById('diasAlert').textContent=criticos>0?`⚠ ${criticos} acima de 60 dias`:'';
   renderPage('tTerceiros','bTerceiros','pageTerceiros',tc,rowTerceiros);
 
-  // Entradas — ordenado por PN crescente
   const ent=[...filtered].sort((a,b)=>(a['PN']||'').localeCompare(b['PN']||'','pt-BR'));
   document.getElementById('cntEntrada').textContent=ent.length;
   const vEnt=ent.reduce((s,r)=>s+r._valor,0);
   document.getElementById('valEntrada').textContent=vEnt>0?fmtCur(vEnt):'';
   renderPage('tEntrada','bEntrada','pageEntrada',ent,rowEntrada);
 
-  // Devoluções — ordenado por PN crescente
   const dev=filtered.filter(r=>r._status==='Retornado')
     .sort((a,b)=>(a['PN']||'').localeCompare(b['PN']||'','pt-BR'));
   document.getElementById('cntDev').textContent=dev.length;
@@ -978,7 +935,6 @@ function rowDev(r){
   </tr>`;
 }
 
-// ── PAGINATION ───────────────────────────────────────────────────────────────
 function renderPage(tId,bId,pgId,data,rowFn){
   const pg=pages[tId]||0;
   const start=pg*PAGE_SIZE, end=start+PAGE_SIZE;
@@ -988,7 +944,6 @@ function renderPage(tId,bId,pgId,data,rowFn){
   if(!data.length){ tbody.innerHTML=`<tr><td colspan="20" class="empty">Nenhum registro encontrado</td></tr>`; }
   else tbody.innerHTML=slice.map(rowFn).join('');
 
-  // Pagination bar
   const totalPgs=Math.ceil(data.length/PAGE_SIZE);
   const pgBar=document.getElementById(pgId);
   if(totalPgs<=1){ pgBar.innerHTML=''; return; }
@@ -1008,10 +963,7 @@ function goPage(tId,pg){
   document.getElementById(tId).scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-// ── SORT TABLES ───────────────────────────────────────────────────────────────
 function sortTable(tId,col){
-  // Simple sort based on current filtered display — rebuilds via applyFilters
-  // We'll implement simple toggle sort on visible data
   const bodyId = 'b'+tId.replace('t','');
   const rows=[...document.getElementById(bodyId+''.replace('b','b')).querySelectorAll('tr:not(.totrow)')];
   const dir=(sortState[tId+col]||1)*-1;
@@ -1028,14 +980,11 @@ function sortTable(tId,col){
   if(tbody) rows.forEach(r=>tbody.appendChild(r));
 }
 
-// ── COUNTDOWN ────────────────────────────────────────────────────────────────
 function doRefresh(){
   loadData();
 }
 
-// ── INIT ─────────────────────────────────────────────────────────────────────
 loadData();
 </script>
 </body>
 </html>
-
