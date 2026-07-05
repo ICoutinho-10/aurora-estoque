@@ -66,7 +66,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 .charts-row{display:grid;gap:12px;margin-bottom:16px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--sh)}
 .card-title{font-size:11px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
-.chart-wrap{position:relative}
+.chart-wrap{position:relative}.chart-wrap canvas{cursor:pointer}
 .tcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:16px;overflow:hidden}
 .thead-bar{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
 .thead-bar .ttitle{font-size:13px;font-weight:600}
@@ -129,6 +129,13 @@ footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);bor
 </header>
 
 <div class="main">
+  <!-- CHART FILTER BADGE -->
+  <div id="chartFilterBadge" style="display:none;background:var(--teal);color:#fff;border-radius:var(--r);padding:10px 16px;margin-bottom:12px;display:none;align-items:center;gap:12px;font-size:12px;font-weight:600">
+    <span>🎯</span>
+    <span id="chartFilterLabel">Filtro ativo</span>
+    <button onclick="clearChartFilters()" style="margin-left:auto;background:rgba(255,255,255,.2);border:none;color:#fff;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600">✕ Limpar seleção</button>
+  </div>
+
   <div class="proc-banner" id="procBanner">
     <div><div class="pb-label">Processo</div><div class="pb-value" id="pbVal">—</div></div>
     <div class="pb-stats" id="pbStats"></div>
@@ -267,6 +274,7 @@ const PROXIES=[
 ];
 const PAGE_SIZE=50;
 let raw=[],filtered=[],charts={},sortState={},pages={tTerceiros:0,tEntrada:0,tDev:0};
+let chartFilters={processo:null,status:null,month:null};
 
 const savedTheme=localStorage.getItem('aurora-theme')||'light';
 document.documentElement.setAttribute('data-theme',savedTheme);
@@ -417,6 +425,24 @@ function applyFilters(){
   });
   const badge=document.getElementById('heroBadge');
   if(proc){badge.style.display='flex';badge.textContent=filtered.length;}else{badge.style.display='none';}
+  // Aplicar filtros de gráfico (cross-filtering)
+  if(chartFilters.processo) filtered=filtered.filter(r=>r['Processo']===chartFilters.processo);
+  if(chartFilters.status) filtered=filtered.filter(r=>r._status===chartFilters.status);
+  if(chartFilters.month){
+    const[fy,fm]=chartFilters.month.split('-').map(Number);
+    const fd=new Date(fy,fm-1,1),ld=new Date(fy,fm,0,23,59,59);
+    filtered=filtered.filter(r=>r._dtNF&&r._dtNF>=fd&&r._dtNF<=ld);
+  }
+  // Badge filtro gráfico
+  const cfBadge=document.getElementById('chartFilterBadge');
+  if(cfBadge){
+    const cfParts=[];
+    if(chartFilters.processo) cfParts.push('Processo: '+chartFilters.processo);
+    if(chartFilters.status) cfParts.push('Status: '+chartFilters.status);
+    if(chartFilters.month) cfParts.push('Mês: '+chartFilters.month);
+    if(cfParts.length>0){cfBadge.style.display='flex';document.getElementById('chartFilterLabel').textContent='Seleção: '+cfParts.join(' · ');}
+    else cfBadge.style.display='none';
+  }
   Object.keys(pages).forEach(k=>pages[k]=0);
   updateBanner(proc);renderKPIs();renderCharts();renderTables();
   try{renderSummary();}catch(ex){console.warn("summary:",ex);}
@@ -528,6 +554,7 @@ function renderCharts(){
     data:{labels:['Aguard. NF de Sa\u00edda','Em Terceiros','Retornado'],
       datasets:[{data:[procAb,procTc,procRt],backgroundColor:['#EAB308','#0EA5E9','#0D9488'],borderWidth:2,borderColor:'transparent',hoverOffset:6}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+      onClick:(evt,els)=>{if(els.length){const lbl=['Em Aberto','Em Terceiros','Retornado'][els[0].index];setChartFilter('status',lbl);}},
       plugins:{legend:{position:'bottom',labels:{padding:8,boxWidth:9,color:C.text}},
         tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${ctx.raw} processos (${(ctx.raw/totalProc*100).toFixed(1)}%)`}},
         datalabels:{color:'#fff',font:{weight:'700',size:12},formatter:(v)=>v>0?v:'',textShadowBlur:3,textShadowColor:'rgba(0,0,0,.4)'}}}
@@ -570,6 +597,7 @@ function renderCharts(){
       datasets:[{data:vals,borderColor:'#0D9488',backgroundColor:'rgba(13,148,136,.1)',
         fill:true,tension:.3,pointRadius:4,pointBackgroundColor:'#0D9488',pointBorderColor:'var(--surface)',pointBorderWidth:2}]},
     options:{responsive:true,maintainAspectRatio:false,
+      onClick:(evt,els)=>{if(els.length){setChartFilter('month',_fullMonths[els[0].index]);}},
       plugins:{legend:{display:false},
         datalabels:{anchor:'top',align:'top',offset:5,font:{weight:'600',size:10},
           color:(ctx)=>{const i=ctx.dataIndex;if(i===0)return C.text;return vals[i]>=vals[i-1]?'#0D9488':'#DC2626';},
@@ -598,6 +626,7 @@ function renderCharts(){
         backgroundColor:allProcPN.map(([p])=>(pm[p]&&pm[p].ab>0)?'#EAB308':'#0EA5E9'),
         borderRadius:4,borderSkipped:false}]},
     options:{responsive:true,maintainAspectRatio:false,
+      onClick:(evt,els)=>{if(els.length){setChartFilter('processo',allProcPN[els[0].index][0]);}},
       plugins:{legend:{display:false},
         datalabels:{anchor:'end',align:'top',offset:4,color:C.text,font:{weight:'700',size:11},formatter:(v)=>v}},
       scales:{
@@ -621,6 +650,7 @@ function renderCharts(){
     data:{labels:rankProc.map(([p])=>p),
       datasets:[{data:rankProc.map(([,v])=>v),backgroundColor:'#0EA5E9',borderRadius:4,borderSkipped:false}]},
     options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      onClick:(evt,els)=>{if(els.length){setChartFilter('processo',rankProc[els[0].index][0]);}},
       plugins:{legend:{display:false},
         datalabels:{anchor:'end',align:'end',color:C.text,font:{weight:'600',size:10},
           formatter:(v)=>'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0}),padding:{left:4}}},
@@ -636,6 +666,7 @@ function renderCharts(){
     data:{labels:rankQtd.map(([p])=>p),
       datasets:[{data:rankQtd.map(([,v])=>v),backgroundColor:'#0D9488',borderRadius:4,borderSkipped:false}]},
     options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      onClick:(evt,els)=>{if(els.length){setChartFilter('processo',rankQtd[els[0].index][0]);}},
       plugins:{legend:{display:false},
         datalabels:{anchor:'end',align:'end',color:C.text,font:{weight:'700',size:11},
           formatter:(v)=>v.toLocaleString('pt-BR'),padding:{left:4}}},
@@ -663,6 +694,7 @@ function renderCharts(){
             {label:"PN's Em Terceiros",data:partial.map(([,v])=>v.pnsTc.size),backgroundColor:'#0EA5E9',borderRadius:3,borderSkipped:false}
           ]},
         options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+          onClick:(evt,els)=>{if(els.length){setChartFilter('processo',partial[els[0].index][0]);}},
           plugins:{legend:{position:'bottom',labels:{padding:8,boxWidth:9,color:C.text}},
             datalabels:{anchor:'end',align:'end',color:C.text,font:{weight:'600',size:10},formatter:(v)=>v>0?v:''}},
           scales:{x:{display:false},y:{grid:{display:false},border:{display:false},ticks:{color:C.text}}},
@@ -751,6 +783,19 @@ function sortTable(tId,col){
   });
   const tbody=document.getElementById('b'+tId.slice(1));
   if(tbody)rows.forEach(r=>tbody.appendChild(r));
+}
+function clearChartFilters(){
+  chartFilters={processo:null,status:null,month:null};
+  applyFilters();
+}
+function setChartFilter(type,value){
+  // Toggle: clicar duas vezes limpa
+  if(chartFilters[type]===value){chartFilters[type]=null;}
+  else{
+    chartFilters={processo:null,status:null,month:null};
+    chartFilters[type]=value;
+  }
+  applyFilters();
 }
 function doRefresh(){loadData();}
 
