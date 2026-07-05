@@ -801,7 +801,7 @@ function renderSummary(){
   document.getElementById('summaryContent').innerHTML=`
     <div>
       <div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">📊 Visão Geral</div>
-      ${item('📦','Total de Processos',`${totalProcs} processos · ${filtered.length.toLocaleString('pt-BR')} itens`)}
+      ${item('📦','Total de Processos',totalProcs+' processos · '+filtered.length.toLocaleString('pt-BR')+' itens')}
       ${item('🔄','Taxa de Conclusão',`${pctRt} concluídos (${procsRt} de ${totalProcs} processos)`)}
       ${item('🚛','Em Terceiros',`${procsTc} processos (${pctTc}) · ${fmtCur(vtc)}`)}
       ${item('⏳','Aguardando NF de Saída',`${aguardando} processo${aguardando!==1?'s':''} pendente${aguardando!==1?'s':''}`)}
@@ -816,7 +816,7 @@ function renderSummary(){
     <div>
       <div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">🏆 Destaques</div>
       ${item('1️⃣','Maior Processo por Valor em Terceiros',topProcStr)}
-      ${item('2️⃣','Maior Processo por PN's em Terceiros',topPNStr)}
+      ${item('2️⃣','Maior Processo por PNs em Terceiros',topPNStr)}
       ${item('📈','Status do Estoque',procsRt===totalProcs?'<span style="color:#0D9488;font-weight:700">✓ Todos os processos finalizados</span>':procsTc===0?'<span style="color:#0D9488">Nenhum item em terceiros</span>':`${procsTc} processo${procsTc!==1?'s':''} requerem atenção`)}
       ${item('🗓️','Última Atualização',today.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'}))}
     </div>`;
