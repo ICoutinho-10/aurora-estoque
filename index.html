@@ -9,22 +9,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 <style>
-:root {
-  --bg:#F1F5F9;--surface:#FFFFFF;--surface2:#F8FAFC;--border:#E2E8F0;
-  --txt:#0A1628;--txt2:#475569;--muted:#94A3B8;
-  --teal:#0D9488;--teal-lt:#CCFBF1;--teal-dk:#0F766E;
-  --blue:#1D4ED8;--orange:#EA580C;--red:#DC2626;--green:#0D9488;
-  --sh:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
-  --sh2:0 4px 12px rgba(0,0,0,.1);--r:12px;--r2:8px;
-}
-[data-theme=dark]{
-  --bg:#060D1A;--surface:#0F1F35;--surface2:#0A1628;--border:#1E3A5F;
-  --txt:#E2E8F0;--txt2:#94A3B8;--muted:#475569;
-  --sh:0 1px 3px rgba(0,0,0,.4);--sh2:0 4px 12px rgba(0,0,0,.5);
-}
+:root{--bg:#F1F5F9;--surface:#FFFFFF;--surface2:#F8FAFC;--border:#E2E8F0;--txt:#0A1628;--txt2:#475569;--muted:#94A3B8;--teal:#0D9488;--teal-lt:#CCFBF1;--teal-dk:#0F766E;--blue:#1D4ED8;--orange:#EA580C;--red:#DC2626;--green:#0D9488;--sh:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);--sh2:0 4px 12px rgba(0,0,0,.1);--r:12px;--r2:8px}
+[data-theme=dark]{--bg:#060D1A;--surface:#0F1F35;--surface2:#0A1628;--border:#1E3A5F;--txt:#E2E8F0;--txt2:#94A3B8;--muted:#475569;--sh:0 1px 3px rgba(0,0,0,.4);--sh2:0 4px 12px rgba(0,0,0,.5)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;transition:background .2s,color .2s}
-
 .hdr{background:var(--surface);border-bottom:1px solid var(--border);height:70px;display:flex;align-items:center;gap:14px;padding:0 20px;position:sticky;top:0;z-index:200;box-shadow:var(--sh)}
 .brand{display:flex;align-items:center;gap:9px;flex-shrink:0}
 .brand-dot{width:8px;height:8px;border-radius:50%;background:var(--teal)}
@@ -46,9 +34,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 .btn-teal{background:var(--teal);border-color:var(--teal);color:#fff}
 .btn-teal:hover{background:var(--teal-dk);border-color:var(--teal-dk);color:#fff}
 .btn:disabled{opacity:.5;cursor:not-allowed}
-
 .main{padding:18px 20px 60px;max-width:1700px;margin:0 auto}
-
 .proc-banner{background:linear-gradient(120deg,var(--teal) 0%,var(--teal-dk) 100%);border-radius:var(--r);padding:14px 20px;margin-bottom:16px;display:none;align-items:center;gap:20px;color:#fff}
 .proc-banner.on{display:flex}
 .pb-label{font-size:10px;font-weight:600;opacity:.75;text-transform:uppercase;letter-spacing:.06em}
@@ -59,7 +45,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 .pb-stat-l{font-size:10px;opacity:.7;margin-top:1px}
 .pb-close{background:rgba(255,255,255,.15);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
 .pb-close:hover{background:rgba(255,255,255,.3)}
-
 .fbar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:16px;box-shadow:var(--sh)}
 .fg{display:flex;flex-direction:column;gap:3px;flex:1;min-width:110px;max-width:200px}
 .fg label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
@@ -69,7 +54,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 .fg-processo .fi{font-weight:600;border-color:var(--teal);border-width:1.5px}
 .fclear{height:30px;padding:0 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;align-self:flex-end}
 .fclear:hover{border-color:var(--red);color:var(--red)}
-
 .kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:16px}
 .kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh);position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s}
 .kpi:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
@@ -79,12 +63,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 .kpi-sub{font-size:11px;color:var(--muted);margin-top:4px}
 .kpi-track{height:3px;background:var(--border);border-radius:2px;margin-top:10px;overflow:hidden}
 .kpi-fill{height:100%;border-radius:2px;transition:width .6s ease}
-
-.charts-row{display:grid;grid-template-columns:260px 1fr 1fr;gap:12px;margin-bottom:16px}
+.charts-row{display:grid;gap:12px;margin-bottom:16px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--sh)}
 .card-title{font-size:11px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
 .chart-wrap{position:relative}
-
 .tcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:16px;overflow:hidden}
 .thead-bar{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
 .thead-bar .ttitle{font-size:13px;font-weight:600}
@@ -95,57 +77,37 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 table{width:100%;border-collapse:collapse;font-size:12px}
 thead th{padding:7px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;background:var(--surface2);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none}
 thead th:hover{color:var(--teal)}
-thead th.sorted{color:var(--teal)}
 tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
 tbody tr:last-child{border-bottom:none}
 tbody tr:hover{background:var(--surface2)}
 tbody td{padding:8px 12px;color:var(--txt);white-space:nowrap}
-.totrow td{font-weight:600;border-top:2px solid var(--border);background:var(--surface2)!important}
 .empty{padding:32px;text-align:center;color:var(--muted);font-size:12px}
 .loading{padding:40px;text-align:center;color:var(--muted);font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px}
 .spin-ico{display:inline-block;animation:rotate 1s linear infinite}
 @keyframes rotate{to{transform:rotate(360deg)}}
-
 .bot-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
 .badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;white-space:nowrap}
 .b-dot{width:5px;height:5px;border-radius:50%}
-.bg{background:#DCFCE7;color:#15803D}
-.bo{background:#FEF3C7;color:#B45309}
-.br{background:#FEE2E2;color:#DC2626}
-.bb{background:#DBEAFE;color:#1D4ED8}
-[data-theme=dark] .bg{background:rgba(22,163,74,.2);color:#4ADE80}
-[data-theme=dark] .bo{background:rgba(234,88,12,.2);color:#FB923C}
-[data-theme=dark] .br{background:rgba(220,38,38,.2);color:#F87171}
-[data-theme=dark] .bb{background:rgba(29,78,216,.2);color:#60A5FA}
+.bg{background:#DCFCE7;color:#15803D}.bo{background:#FEF3C7;color:#B45309}.br{background:#FEE2E2;color:#DC2626}.bb{background:#DBEAFE;color:#1D4ED8}
+[data-theme=dark] .bg{background:rgba(22,163,74,.2);color:#4ADE80}[data-theme=dark] .bo{background:rgba(234,88,12,.2);color:#FB923C}[data-theme=dark] .br{background:rgba(220,38,38,.2);color:#F87171}[data-theme=dark] .bb{background:rgba(29,78,216,.2);color:#60A5FA}
 .ptag{background:var(--teal-lt);color:var(--teal-dk);padding:2px 7px;border-radius:4px;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
 [data-theme=dark] .ptag{background:rgba(13,148,136,.2);color:var(--teal)}
-.dias-warn{color:var(--red);font-weight:700}
-.dias-ok{color:var(--txt2)}
-
+.dias-warn{color:var(--red);font-weight:700}.dias-ok{color:var(--txt2)}
 footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
-
 .pagebar{padding:10px 16px;display:flex;align-items:center;gap:8px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}
 .pagebar .pgbtn{height:28px;padding:0 10px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--txt2);font-size:11px;cursor:pointer;transition:all .15s}
 .pagebar .pgbtn:hover{border-color:var(--teal);color:var(--teal)}
 .pagebar .pgbtn.active{background:var(--teal);color:#fff;border-color:var(--teal)}
 .pagebar .pgbtn:disabled{opacity:.4;cursor:not-allowed}
-
-::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-
-@media(max-width:1200px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.charts-row{grid-template-columns:1fr 1fr}}
-@media(max-width:768px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.charts-row{grid-template-columns:1fr}.bot-grid{grid-template-columns:1fr}.pb-stats{display:none}}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+@media(max-width:1200px){.kpi-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.bot-grid{grid-template-columns:1fr}.pb-stats{display:none}}
 </style>
 </head>
 <body>
-
-<!-- HEADER -->
 <header class="hdr">
   <div class="brand" style="flex-direction:column;align-items:center;gap:4px">
-    <img id="bydLogo" src="data:image/png;base64,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" alt="BYD"
-      style="height:18px;width:auto;object-fit:contain;transition:filter .2s">
+    <img id="bydLogo" src="data:image/png;base64,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" alt="BYD" style="height:18px;width:auto;object-fit:contain;transition:filter .2s">
     <span style="font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap">Estoque Aurora</span>
   </div>
   <div class="sep"></div>
@@ -167,79 +129,48 @@ footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);bor
 </header>
 
 <div class="main">
-
-  <!-- PROCESSO BANNER -->
   <div class="proc-banner" id="procBanner">
     <div><div class="pb-label">Processo</div><div class="pb-value" id="pbVal">—</div></div>
     <div class="pb-stats" id="pbStats"></div>
     <button class="pb-close" onclick="clearFilters()" title="Limpar filtro">✕</button>
   </div>
-
-  <!-- FILTER BAR -->
   <div class="fbar">
-    <div class="fg fg-processo">
-      <label>Processo ★</label>
-      <input class="fi" type="text" id="fProcesso" list="dl-proc" placeholder="Todos..." autocomplete="off">
-      <datalist id="dl-proc"></datalist>
-    </div>
-    <div class="fg">
-      <label>PN / Part Number</label>
-      <input class="fi" type="text" id="fPN" placeholder="Código...">
-    </div>
-    <div class="fg">
-      <label>Container</label>
-      <input class="fi" type="text" id="fContainer" placeholder="Container...">
-    </div>
-    <div class="fg">
-      <label>NF Entrada</label>
-      <input class="fi" type="text" id="fNFE" placeholder="Número NF...">
-    </div>
-    <div class="fg">
-      <label>Responsável</label>
-      <input class="fi" type="text" id="fResp" placeholder="Nome...">
-    </div>
-    <div class="fg" style="max-width:140px">
-      <label>Status</label>
-      <select class="fi" id="fStatus">
-        <option value="">Todos</option>
-        <option value="Em Aberto">Em Aberto</option>
-        <option value="Em Terceiros">Em Terceiros</option>
-        <option value="Retornado">Retornado</option>
-      </select>
-    </div>
-    <div class="fg" style="max-width:130px">
-      <label>Emissão De</label>
-      <input class="fi" type="date" id="fDtFrom">
-    </div>
-    <div class="fg" style="max-width:130px">
-      <label>Emissão Até</label>
-      <input class="fi" type="date" id="fDtTo">
-    </div>
+    <div class="fg fg-processo"><label>Processo ★</label><input class="fi" type="text" id="fProcesso" list="dl-proc" placeholder="Todos..." autocomplete="off"><datalist id="dl-proc"></datalist></div>
+    <div class="fg"><label>PN / Part Number</label><input class="fi" type="text" id="fPN" placeholder="Código..."></div>
+    <div class="fg"><label>Container</label><input class="fi" type="text" id="fContainer" placeholder="Container..."></div>
+    <div class="fg"><label>NF Entrada</label><input class="fi" type="text" id="fNFE" placeholder="Número NF..."></div>
+    <div class="fg"><label>Responsável</label><input class="fi" type="text" id="fResp" placeholder="Nome..."></div>
+    <div class="fg" style="max-width:140px"><label>Status</label>
+      <select class="fi" id="fStatus"><option value="">Todos</option><option value="Em Aberto">Em Aberto</option><option value="Em Terceiros">Em Terceiros</option><option value="Retornado">Retornado</option></select></div>
+    <div class="fg" style="max-width:130px"><label>Emissão De</label><input class="fi" type="date" id="fDtFrom"></div>
+    <div class="fg" style="max-width:130px"><label>Emissão Até</label><input class="fi" type="date" id="fDtTo"></div>
     <button class="fclear" onclick="clearFilters()">✕ Limpar</button>
   </div>
 
-  <!-- KPI CARDS -->
   <div class="kpi-grid" id="kpiGrid">
     <div style="grid-column:1/-1" class="loading"><span class="spin-ico">⟳</span> Carregando dados da planilha...</div>
   </div>
 
-  <!-- CHARTS -->
-  <div class="charts-row" style="grid-template-columns:240px 1fr 1fr">
+  <!-- ROW 1: Donut + Saldo Mês -->
+  <div class="charts-row" style="grid-template-columns:260px 1fr">
     <div class="card">
       <div class="card-title">Status dos Processos</div>
-      <div class="chart-wrap" style="height:200px"><canvas id="cStatus"></canvas></div>
+      <div class="chart-wrap" style="height:220px"><canvas id="cStatus"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">Processos por SKU's</div>
-      <div class="chart-wrap" id="wrapProcesso" style="height:200px;overflow-y:auto"><canvas id="cProcesso"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-title">Valor em Terceiros por Mês</div>
-      <div class="chart-wrap" style="height:200px"><canvas id="cMes"></canvas></div>
+      <div class="card-title">Saldo em Terceiros por Mês (último dia)</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="cMes"></canvas></div>
     </div>
   </div>
-  <!-- RANKING CHARTS -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+
+  <!-- ROW 2: Processos por PN's (todos em terceiros) -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">Processos por PN's — Em Terceiros e Aguardando NF Saída</div>
+    <div class="chart-wrap" id="wrapProcesso" style="height:260px;overflow-y:auto"><canvas id="cProcesso"></canvas></div>
+  </div>
+
+  <!-- ROW 3: Rankings -->
+  <div class="charts-row" style="grid-template-columns:1fr 1fr">
     <div class="card">
       <div class="card-title">🏆 Ranking por Valor em Terceiros (Top 10)</div>
       <div class="chart-wrap" style="height:280px"><canvas id="cRanking"></canvas></div>
@@ -250,320 +181,247 @@ footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);bor
     </div>
   </div>
 
-  <!-- TABLE: EM TERCEIROS (foco principal) -->
+  <!-- ROW 4: Retorno Parcial (aparece só se houver dados) -->
+  <div class="card" id="partialCard" style="margin-bottom:16px;display:none">
+    <div class="card-title">⚠️ Retorno Parcial — PNs Retornados vs Ainda em Terceiros</div>
+    <div class="chart-wrap" id="wrapPartial" style="height:220px"><canvas id="cPartial"></canvas></div>
+  </div>
+
+  <!-- TABELAS -->
   <div class="tcard" style="background:rgba(14,165,233,0.05);border-color:rgba(14,165,233,0.2)">
     <div class="thead-bar">
       <div class="ttitle">📦 Estoque em Terceiros</div>
       <div class="tcnt" id="cntTerceiros">0</div>
       <div class="tval" id="valTerceiros"></div>
-      <div style="margin-left:8px;font-size:11px;color:var(--muted)" id="diasAlert"></div>
+      <div style="margin-left:8px;font-size:11px;color:var(--red);font-weight:600" id="diasAlert"></div>
     </div>
     <div class="tscroll">
       <table id="tTerceiros">
         <thead><tr>
-          <th onclick="sortTable('tTerceiros',0)">Processo ↕</th>
-          <th onclick="sortTable('tTerceiros',1)">NF Entrada ↕</th>
-          <th onclick="sortTable('tTerceiros',2)">Container ↕</th>
-          <th onclick="sortTable('tTerceiros',3)">PN ↕</th>
-          <th>Descrição</th>
-          <th onclick="sortTable('tTerceiros',5)">Qtd ↕</th>
-          <th onclick="sortTable('tTerceiros',6)">NF Saída ↕</th>
-          <th onclick="sortTable('tTerceiros',7)">Data NF ↕</th>
-          <th onclick="sortTable('tTerceiros',8)">Dias Fora ↕</th>
-          <th>Responsável</th>
-          <th onclick="sortTable('tTerceiros',10)">Valor ↕</th>
-          <th>MIGO</th>
+          <th onclick="sortTable('tTerceiros',0)">Processo ↕</th><th onclick="sortTable('tTerceiros',1)">NF Entrada ↕</th>
+          <th onclick="sortTable('tTerceiros',2)">Container ↕</th><th onclick="sortTable('tTerceiros',3)">PN ↕</th>
+          <th>Descrição</th><th onclick="sortTable('tTerceiros',5)">Qtd ↕</th>
+          <th onclick="sortTable('tTerceiros',6)">NF Saída ↕</th><th onclick="sortTable('tTerceiros',7)">Data NF ↕</th>
+          <th onclick="sortTable('tTerceiros',8)">Dias Fora ↕</th><th>Responsável</th>
+          <th onclick="sortTable('tTerceiros',10)">Valor ↕</th><th>MIGO</th>
         </tr></thead>
-        <tbody id="bTerceiros"><tr><td colspan="12" class="loading"><span class="spin-ico">⟳</span> Carregando...</td></tr></tbody>
+        <tbody id="bTerceiros"><tr><td colspan="12" class="loading"><span class="spin-ico">⟳</span></td></tr></tbody>
       </table>
     </div>
     <div class="pagebar" id="pageTerceiros"></div>
   </div>
 
-  <!-- BOTTOM: Entradas + Devoluções -->
   <div class="bot-grid">
-
-    <!-- ENTRADAS -->
     <div class="tcard" style="background:rgba(234,179,8,0.05);border-color:rgba(234,179,8,0.2)">
       <div class="thead-bar">
-        <div class="ttitle">📥 Entradas de NF</div>
-        <div class="tcnt" id="cntEntrada">0</div>
-        <div class="tval" id="valEntrada"></div>
+        <div class="ttitle">📥 Entradas de NF</div><div class="tcnt" id="cntEntrada">0</div><div class="tval" id="valEntrada"></div>
       </div>
       <div class="tscroll">
         <table id="tEntrada">
           <thead><tr>
-            <th onclick="sortTable('tEntrada',0)">Processo ↕</th>
-            <th onclick="sortTable('tEntrada',1)">NF Entrada ↕</th>
-            <th>Container</th>
-            <th>PN</th>
-            <th onclick="sortTable('tEntrada',4)">Qtd ↕</th>
-            <th onclick="sortTable('tEntrada',5)">Data Emissão ↕</th>
-            <th onclick="sortTable('tEntrada',6)">Valor ↕</th>
-            <th>Status</th>
+            <th onclick="sortTable('tEntrada',0)">Processo ↕</th><th onclick="sortTable('tEntrada',1)">NF Entrada ↕</th>
+            <th>Container</th><th>PN</th><th onclick="sortTable('tEntrada',4)">Qtd ↕</th>
+            <th onclick="sortTable('tEntrada',5)">Data Emissão ↕</th><th onclick="sortTable('tEntrada',6)">Valor ↕</th><th>Status</th>
           </tr></thead>
           <tbody id="bEntrada"><tr><td colspan="8" class="loading"><span class="spin-ico">⟳</span></td></tr></tbody>
         </table>
       </div>
       <div class="pagebar" id="pageEntrada"></div>
     </div>
-
-    <!-- DEVOLUÇÕES -->
     <div class="tcard" style="background:rgba(13,148,136,0.05);border-color:rgba(13,148,136,0.2)">
       <div class="thead-bar">
-        <div class="ttitle">🔄 Devoluções / Retornos</div>
-        <div class="tcnt" id="cntDev">0</div>
+        <div class="ttitle">🔄 Devoluções / Retornos</div><div class="tcnt" id="cntDev">0</div>
       </div>
       <div class="tscroll">
         <table id="tDev">
           <thead><tr>
-            <th onclick="sortTable('tDev',0)">Processo ↕</th>
-            <th onclick="sortTable('tDev',1)">NF Retorno ↕</th>
-            <th>PN</th>
-            <th onclick="sortTable('tDev',3)">Qtd ↕</th>
-            <th onclick="sortTable('tDev',4)">Data Retorno ↕</th>
-            <th>MIGO</th>
-            <th>Responsável</th>
-            <th>Status Ret.</th>
+            <th onclick="sortTable('tDev',0)">Processo ↕</th><th onclick="sortTable('tDev',1)">NF Retorno ↕</th>
+            <th>PN</th><th onclick="sortTable('tDev',3)">Qtd ↕</th><th onclick="sortTable('tDev',4)">Data Retorno ↕</th>
+            <th>MIGO</th><th>Responsável</th><th>Status Ret.</th>
           </tr></thead>
           <tbody id="bDev"><tr><td colspan="8" class="loading"><span class="spin-ico">⟳</span></td></tr></tbody>
         </table>
       </div>
       <div class="pagebar" id="pageDev"></div>
     </div>
-
   </div>
 </div>
 
 <footer>BYD Pós-Vendas · Aurora · <span id="totalReg">—</span></footer>
 
 <script>
-const CSV_DIRECT = 'https://docs.google.com/spreadsheets/d/17ZclxoAJXJNw2ejkgS-dqFH1ZCFL1s4wkYtsNBgdi98/export?format=csv&gid=0';
-const PROXIES = [
-  u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
-  u => 'https://corsproxy.io/?' + encodeURIComponent(u),
-  u => 'https://thingproxy.freeboard.io/fetch/' + u,
-  u => u
+const CSV_DIRECT='https://docs.google.com/spreadsheets/d/17ZclxoAJXJNw2ejkgS-dqFH1ZCFL1s4wkYtsNBgdi98/export?format=csv&gid=0';
+const PROXIES=[
+  u=>'https://api.allorigins.win/raw?url='+encodeURIComponent(u),
+  u=>'https://corsproxy.io/?'+encodeURIComponent(u),
+  u=>'https://thingproxy.freeboard.io/fetch/'+u,
+  u=>u
 ];
+const PAGE_SIZE=50;
+let raw=[],filtered=[],charts={},sortState={},pages={tTerceiros:0,tEntrada:0,tDev:0};
 
-const PAGE_SIZE = 50;
-
-let raw = [], filtered = [];
-let charts = {};
-let cdTimer = null;
-let sortState = {};
-let pages = { tTerceiros:0, tEntrada:0, tDev:0 };
-
-const savedTheme = localStorage.getItem('aurora-theme') || 'light';
-document.documentElement.setAttribute('data-theme', savedTheme);
+const savedTheme=localStorage.getItem('aurora-theme')||'light';
+document.documentElement.setAttribute('data-theme',savedTheme);
 function toggleTheme(){
-  const d = document.documentElement;
-  const t = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  d.setAttribute('data-theme', t);
-  localStorage.setItem('aurora-theme', t);
-  applyLogoTheme(t);
-  setTimeout(rebuildCharts, 50);
+  const d=document.documentElement,t=d.getAttribute('data-theme')==='dark'?'light':'dark';
+  d.setAttribute('data-theme',t);localStorage.setItem('aurora-theme',t);
+  applyLogoTheme(t);setTimeout(rebuildCharts,50);
 }
 function applyLogoTheme(t){
-  const logo = document.getElementById('bydLogo');
-  if(!logo) return;
-  logo.style.filter = t === 'dark' ? 'brightness(0) invert(1)' : 'none';
+  const logo=document.getElementById('bydLogo');
+  if(!logo)return;
+  logo.style.filter=t==='dark'?'brightness(0) invert(1)':'none';
 }
 applyLogoTheme(savedTheme);
 
-
 function parseCSVLine(line){
-  const r=[]; let q=false, cur='';
+  const r=[];let q=false,cur='';
   for(let i=0;i<line.length;i++){
     const c=line[i];
-    if(c==='"'){q=!q}
-    else if(c===','&&!q){r.push(cur.trim());cur=''}
-    else cur+=c;
+    if(c==='"'){q=!q}else if(c===','&&!q){r.push(cur.trim());cur=''}else cur+=c;
   }
-  r.push(cur.trim()); return r;
+  r.push(cur.trim());return r;
 }
-
 function parseCSV(text){
-  const lines = text.split('\n').map(l=>l.trimEnd()).filter(l=>l.length>0);
-  let hIdx = -1;
+  const lines=text.split('\n').map(l=>l.trimEnd()).filter(l=>l.length>0);
+  let hIdx=-1;
   for(let i=0;i<Math.min(lines.length,8);i++){
-    const f = parseCSVLine(lines[i]);
-    if(f[0]==='ID' && f.some(x=>x==='PN') && f.some(x=>x==='Processo')){hIdx=i;break;}
+    const f=parseCSVLine(lines[i]);
+    if(f[0]==='ID'&&f.some(x=>x==='PN')&&f.some(x=>x==='Processo')){hIdx=i;break;}
   }
-  if(hIdx===-1) return [];
-  const headers = parseCSVLine(lines[hIdx]);
+  if(hIdx===-1)return[];
+  const headers=parseCSVLine(lines[hIdx]);
   const rows=[];
   for(let i=hIdx+1;i<lines.length;i++){
     const f=parseCSVLine(lines[i]);
-    if(f.length<5) continue;
-    const row={};
-    headers.forEach((h,j)=>{ row[h]=f[j]||''; });
-    if(!row['PN'] && !row['Processo']) continue;
+    if(f.length<5)continue;
+    const row={};headers.forEach((h,j)=>{row[h]=f[j]||'';});
+    if(!row['PN']&&!row['Processo'])continue;
     rows.push(row);
   }
   return rows;
 }
-
 function parseDate(s){
-  if(!s||s.trim()==='') return null;
-  const p=s.trim().split('/');
-  if(p.length!==3) return null;
+  if(!s||s.trim()==='')return null;
+  const p=s.trim().split('/');if(p.length!==3)return null;
   const d=+p[0],m=+p[1],y=+p[2];
-  if(isNaN(d)||isNaN(m)||isNaN(y)||y<1900) return null;
+  if(isNaN(d)||isNaN(m)||isNaN(y)||y<1900)return null;
   return new Date(y,m-1,d);
 }
 function parseNum(s){
-  if(!s||s.trim()==='') return 0;
-  return parseFloat(s.trim().replace(/\./g,'').replace(',','.')) || 0;
+  if(!s||s.trim()==='')return 0;
+  return parseFloat(s.trim().replace(/\./g,'').replace(',','.'))||0;
 }
 function fmtCur(n){
-  if(!n||isNaN(n)) return '—';
-  return 'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  if(!n||isNaN(n))return'—';
+  return'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 }
-function fmtDate(s){
-  return (s&&s.trim()) ? s.trim() : '—';
-}
-function daysBetween(d1,d2){
-  if(!d1||!d2) return null;
-  return Math.round((d2-d1)/(864e5));
-}
+function fmtDate(s){return(s&&s.trim())?s.trim():'—';}
+function daysBetween(d1,d2){if(!d1||!d2)return null;return Math.round((d2-d1)/864e5);}
 function getStatus(row){
-  const ns=(row['NF de Saída']||'').trim();
-  const nr=(row['NF Retorno']||'').trim();
-  if(ns==='') return 'Em Aberto';
-  if(nr==='') return 'Em Terceiros';
-  return 'Retornado';
+  const ns=(row['NF de Saída']||'').trim(),nr=(row['NF Retorno']||'').trim();
+  if(ns==='')return'Em Aberto';if(nr==='')return'Em Terceiros';return'Retornado';
 }
 function statusBadge(s){
   const map={'Em Aberto':'<span class="badge br"><span class="b-dot" style="background:#DC2626"></span>Em Aberto</span>',
-  'Em Terceiros':'<span class="badge bo"><span class="b-dot" style="background:#D97706"></span>Em Terceiros</span>',
-  'Retornado':'<span class="badge bg"><span class="b-dot" style="background:#0D9488"></span>Retornado</span>'};
+    'Em Terceiros':'<span class="badge bo"><span class="b-dot" style="background:#D97706"></span>Em Terceiros</span>',
+    'Retornado':'<span class="badge bg"><span class="b-dot" style="background:#0D9488"></span>Retornado</span>'};
   return map[s]||s;
 }
 
 async function fetchCSV(){
-  const base = CSV_DIRECT + '&nocache=' + Date.now();
-  let lastErr = null;
+  const base=CSV_DIRECT+'&nocache='+Date.now();
+  let lastErr=null;
   for(const proxyFn of PROXIES){
-    const url = proxyFn(base);
+    const url=proxyFn(base);
     try{
-      const r = await Promise.race([
-        fetch(url),
-        new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))
-      ]);
-      if(r.ok){
-        const txt = await r.text();
-        if(txt && txt.length > 200) return txt;
-      }
-    } catch(e){ lastErr = e; }
+      const r=await Promise.race([fetch(url),new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))]);
+      if(r.ok){const txt=await r.text();if(txt&&txt.length>200)return txt;}
+    }catch(e){lastErr=e;}
   }
-  throw lastErr || new Error('Todos os proxies falharam');
+  throw lastErr||new Error('Todos os proxies falharam');
 }
 
 async function loadData(){
   setSpinner(true);
   try{
-    const txt = await fetchCSV();
-    raw = parseCSV(txt);
-    const today = new Date();
+    const txt=await fetchCSV();
+    raw=parseCSV(txt);
+    const today=new Date();
     raw.forEach(r=>{
-      r._status   = getStatus(r);
-      r._valor    = parseNum(r['Valor Total']);
-      r._dtEmit   = parseDate(r['Data Emissão']);
-      r._dtNF     = parseDate(r['Data NF']);
-      r._dtRet    = parseDate(r['Data retorno']);
-      r._diasFora = (r._status==='Em Terceiros' && r._dtNF) ? daysBetween(r._dtNF,today) : null;
+      r._status=getStatus(r);r._valor=parseNum(r['Valor Total']);
+      r._dtEmit=parseDate(r['Data Emissão']);r._dtNF=parseDate(r['Data NF']);
+      r._dtRet=parseDate(r['Data retorno']);
+      r._diasFora=(r._status==='Em Terceiros'&&r._dtNF)?daysBetween(r._dtNF,today):null;
     });
     populateDataLists();
-    document.getElementById('totalReg').textContent = raw.length+' registros carregados';
-    applyFilters();
-    setUpdTime();
-  } catch(e){
+    document.getElementById('totalReg').textContent=raw.length+' registros carregados';
+    applyFilters();setUpdTime();
+  }catch(e){
     console.error(e);
-    document.getElementById('kpiGrid').innerHTML = `
-      <div style="grid-column:1/-1;padding:32px 24px;text-align:center;font-size:13px">
-        <div style="font-size:28px;margin-bottom:10px">📡</div>
-        <div style="font-weight:700;font-size:16px;color:var(--txt);margin-bottom:8px">Tentando carregar dados...</div>
-        <div style="color:var(--txt2);font-size:12px;line-height:1.9;margin-bottom:16px">
-          Tentamos <strong>4 fontes</strong> — todas bloqueadas neste ambiente de preview.<br>
-          O site funciona <strong>normalmente</strong> quando aberto em Chrome ou Edge:
-        </div>
-        <div style="display:inline-block;text-align:left;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 20px;font-size:12px;line-height:2;color:var(--txt2)">
-          1️⃣ Clique em <strong>↓ Baixar</strong> no canto superior do preview<br>
-          2️⃣ Salve o arquivo <code style="background:var(--border);padding:1px 5px;border-radius:3px">aurora_estoque.html</code><br>
-          3️⃣ Abra no <strong>Chrome</strong> ou <strong>Edge</strong> (duplo clique)<br>
-          4️⃣ Dados carregam em segundos ✓
-        </div>
-        <div style="margin-top:12px;padding:6px 12px;background:var(--surface2);border-radius:6px;font-size:10px;color:var(--muted);display:inline-block">
-          Erro: ${e.message}<br>
-        <small>Abra o console do navegador (F12) e veja qual fonte falhou</small>
-        </div>
-      </div>`;
+    document.getElementById('kpiGrid').innerHTML=`<div style="grid-column:1/-1;padding:32px;text-align:center;font-size:13px">
+      <div style="font-size:28px;margin-bottom:10px">📡</div>
+      <div style="font-weight:700;font-size:16px;color:var(--txt);margin-bottom:8px">Não foi possível carregar os dados</div>
+      <div style="color:var(--txt2);font-size:12px;line-height:2;margin-bottom:12px">
+        Verifique se o Google Tradutor está <strong>desativado</strong> nesta página.<br>
+        Tente pressionar <strong>Ctrl+Shift+R</strong> para recarregar.
+      </div>
+      <div style="padding:6px 12px;background:var(--surface2);border-radius:6px;font-size:10px;color:var(--muted);display:inline-block">Erro: ${e.message}</div>
+    </div>`;
   }
   setSpinner(false);
 }
 
 function populateDataLists(){
-  const processos = [...new Set(raw.map(r=>r['Processo']).filter(Boolean))].sort();
+  const processos=[...new Set(raw.map(r=>r['Processo']).filter(Boolean))].sort();
   ['dl-proc-h','dl-proc'].forEach(id=>{
-    document.getElementById(id).innerHTML = processos.map(p=>`<option value="${p}">`).join('');
+    document.getElementById(id).innerHTML=processos.map(p=>`<option value="${p}">`).join('');
   });
 }
-
-function setSpinner(on){
-  document.getElementById('updDot').className='upd-dot'+(on?' spin':'');
-}
+function setSpinner(on){document.getElementById('updDot').className='upd-dot'+(on?' spin':'');}
 function setUpdTime(){
   const t=new Date();
   document.getElementById('updTime').textContent='Atualizado às '+t.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 }
 
 function applyFilters(){
-  const hp  = (document.getElementById('hProcesso').value||'').trim().toLowerCase();
-  const fp  = (document.getElementById('fProcesso').value||'').trim().toLowerCase();
-  const proc = hp||fp;
-  const pn  = (document.getElementById('fPN').value||'').trim().toLowerCase();
-  const ct  = (document.getElementById('fContainer').value||'').trim().toLowerCase();
-  const nfe = (document.getElementById('fNFE').value||'').trim().toLowerCase();
-  const re  = (document.getElementById('fResp').value||'').trim().toLowerCase();
-  const st  = document.getElementById('fStatus').value;
-  const df  = document.getElementById('fDtFrom').value;
-  const dt  = document.getElementById('fDtTo').value;
-
-  filtered = raw.filter(r=>{
-    if(proc && !(r['Processo']||'').toLowerCase().includes(proc)) return false;
-    if(pn   && !(r['PN']||'').toLowerCase().includes(pn)) return false;
-    if(ct   && !(r['Container']||'').toLowerCase().includes(ct)) return false;
-    if(nfe  && !(r['NF ENTRADA']||'').toLowerCase().includes(nfe)) return false;
-    if(re   && !((r['Responsável']||r['Responsável_4']||'')).toLowerCase().includes(re)) return false;
-    if(st   && r._status!==st) return false;
-    if(df && r._dtEmit && r._dtEmit < new Date(df)) return false;
-    if(dt && r._dtEmit){ const t2=new Date(dt); t2.setHours(23,59,59); if(r._dtEmit>t2) return false; }
+  const hp=(document.getElementById('hProcesso').value||'').trim().toLowerCase();
+  const fp=(document.getElementById('fProcesso').value||'').trim().toLowerCase();
+  const proc=hp||fp;
+  const pn=(document.getElementById('fPN').value||'').trim().toLowerCase();
+  const ct=(document.getElementById('fContainer').value||'').trim().toLowerCase();
+  const nfe=(document.getElementById('fNFE').value||'').trim().toLowerCase();
+  const re=(document.getElementById('fResp').value||'').trim().toLowerCase();
+  const st=document.getElementById('fStatus').value;
+  const df=document.getElementById('fDtFrom').value;
+  const dt=document.getElementById('fDtTo').value;
+  filtered=raw.filter(r=>{
+    if(proc&&!(r['Processo']||'').toLowerCase().includes(proc))return false;
+    if(pn&&!(r['PN']||'').toLowerCase().includes(pn))return false;
+    if(ct&&!(r['Container']||'').toLowerCase().includes(ct))return false;
+    if(nfe&&!(r['NF ENTRADA']||'').toLowerCase().includes(nfe))return false;
+    if(re&&!((r['Responsável']||r['Responsável_4']||'')).toLowerCase().includes(re))return false;
+    if(st&&r._status!==st)return false;
+    if(df&&r._dtEmit&&r._dtEmit<new Date(df))return false;
+    if(dt&&r._dtEmit){const t2=new Date(dt);t2.setHours(23,59,59);if(r._dtEmit>t2)return false;}
     return true;
   });
-
   const badge=document.getElementById('heroBadge');
-  if(proc){ badge.style.display='flex'; badge.textContent=filtered.length; }
-  else { badge.style.display='none'; }
-
+  if(proc){badge.style.display='flex';badge.textContent=filtered.length;}else{badge.style.display='none';}
   Object.keys(pages).forEach(k=>pages[k]=0);
-
-  updateBanner(proc);
-  renderKPIs();
-  renderCharts();
-  renderTables();
+  updateBanner(proc);renderKPIs();renderCharts();renderTables();
 }
 
 function updateBanner(proc){
   const banner=document.getElementById('procBanner');
-  if(!proc){ banner.classList.remove('on'); return; }
+  if(!proc){banner.classList.remove('on');return;}
   banner.classList.add('on');
-  const displayProc = document.getElementById('hProcesso').value || document.getElementById('fProcesso').value;
-  document.getElementById('pbVal').textContent = displayProc;
-  const ab = filtered.filter(r=>r._status==='Em Aberto').length;
-  const tc = filtered.filter(r=>r._status==='Em Terceiros').length;
-  const rt = filtered.filter(r=>r._status==='Retornado').length;
-  const vl = filtered.reduce((s,r)=>s+r._valor,0);
+  const displayProc=document.getElementById('hProcesso').value||document.getElementById('fProcesso').value;
+  document.getElementById('pbVal').textContent=displayProc;
+  const ab=filtered.filter(r=>r._status==='Em Aberto').length;
+  const tc=filtered.filter(r=>r._status==='Em Terceiros').length;
+  const rt=filtered.filter(r=>r._status==='Retornado').length;
+  const vl=filtered.reduce((s,r)=>s+r._valor,0);
   document.getElementById('pbStats').innerHTML=`
     <div class="pb-stat"><div class="pb-stat-v">${filtered.length}</div><div class="pb-stat-l">Total Itens</div></div>
     <div class="pb-stat"><div class="pb-stat-v">${ab}</div><div class="pb-stat-l">Em Aberto</div></div>
@@ -574,171 +432,98 @@ function updateBanner(proc){
 
 function clearFilters(){
   ['fProcesso','fPN','fContainer','fNFE','fResp','fDtFrom','fDtTo'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('fStatus').value='';
-  document.getElementById('hProcesso').value='';
-  document.getElementById('heroBadge').style.display='none';
-  applyFilters();
+  document.getElementById('fStatus').value='';document.getElementById('hProcesso').value='';
+  document.getElementById('heroBadge').style.display='none';applyFilters();
 }
-
-document.getElementById('hProcesso').addEventListener('input',e=>{
-  document.getElementById('fProcesso').value=e.target.value; applyFilters();
-});
-document.getElementById('fProcesso').addEventListener('input',e=>{
-  document.getElementById('hProcesso').value=e.target.value; applyFilters();
-});
+document.getElementById('hProcesso').addEventListener('input',e=>{document.getElementById('fProcesso').value=e.target.value;applyFilters();});
+document.getElementById('fProcesso').addEventListener('input',e=>{document.getElementById('hProcesso').value=e.target.value;applyFilters();});
 ['fPN','fContainer','fNFE','fResp','fStatus','fDtFrom','fDtTo'].forEach(id=>{
-  const el=document.getElementById(id);
-  el.addEventListener('input',applyFilters);
-  el.addEventListener('change',applyFilters);
+  const el=document.getElementById(id);el.addEventListener('input',applyFilters);el.addEventListener('change',applyFilters);
 });
 
 function renderKPIs(){
-  const today = new Date();
-  const _pmKpi = {};
+  const _pm={};
   filtered.forEach(r=>{
     const p=r['Processo']||'N/A';
-    if(!_pmKpi[p]) _pmKpi[p]={ab:0,tc:0,rt:0,total:0};
-    _pmKpi[p].total++;
-    if(r._status==='Em Aberto') _pmKpi[p].ab++;
-    else if(r._status==='Em Terceiros') _pmKpi[p].tc++;
-    else _pmKpi[p].rt++;
+    if(!_pm[p])_pm[p]={ab:0,tc:0,rt:0,total:0};
+    _pm[p].total++;
+    if(r._status==='Em Aberto')_pm[p].ab++;
+    else if(r._status==='Em Terceiros')_pm[p].tc++;
+    else _pm[p].rt++;
   });
-  const totalProcs = Object.keys(_pmKpi).length;
-  const procsTc    = Object.values(_pmKpi).filter(v=>v.tc>0).length;
-  const procsRt    = Object.values(_pmKpi).filter(v=>v.rt===v.total&&v.total>0).length;
-  const aguardando = Object.values(_pmKpi).filter(v=>v.ab>0).length;
-  const vtc        = filtered.filter(r=>r._status==='Em Terceiros').reduce((s,r)=>s+r._valor,0);
-  const diasArr    = filtered.filter(r=>r._diasFora!==null&&r._diasFora>=0).map(r=>r._diasFora);
-  const avgDias    = diasArr.length>0?Math.round(diasArr.reduce((a,b)=>a+b,0)/diasArr.length):0;
-  const maxDias    = diasArr.length>0?Math.max(...diasArr):0;
-  const prt        = totalProcs>0?(procsRt/totalProcs):0;
-  const ptc        = totalProcs>0?(procsTc/totalProcs):0;
-
+  const totalProcs=Object.keys(_pm).length;
+  const procsTc=Object.values(_pm).filter(v=>v.tc>0).length;
+  const procsRt=Object.values(_pm).filter(v=>v.rt===v.total&&v.total>0).length;
+  const aguardando=Object.values(_pm).filter(v=>v.ab>0).length;
+  const vtc=filtered.filter(r=>r._status==='Em Terceiros').reduce((s,r)=>s+r._valor,0);
+  const diasArr=filtered.filter(r=>r._diasFora!==null&&r._diasFora>=0).map(r=>r._diasFora);
+  const avgDias=diasArr.length>0?Math.round(diasArr.reduce((a,b)=>a+b,0)/diasArr.length):0;
+  const maxDias=diasArr.length>0?Math.max(...diasArr):0;
+  const ptc=totalProcs>0?(procsTc/totalProcs):0;
+  const prt=totalProcs>0?(procsRt/totalProcs):0;
   document.getElementById('kpiGrid').innerHTML=`
     <div class="kpi"><div class="kpi-bar-top" style="background:#0D9488"></div>
-      <div class="kpi-lbl">Total de Processos</div>
-      <div class="kpi-val">${totalProcs.toLocaleString('pt-BR')}</div>
-      <div class="kpi-sub">${filtered.length.toLocaleString('pt-BR')} itens</div>
-    </div>
+      <div class="kpi-lbl">Total de Processos</div><div class="kpi-val">${totalProcs.toLocaleString('pt-BR')}</div>
+      <div class="kpi-sub">${filtered.length.toLocaleString('pt-BR')} itens</div></div>
     <div class="kpi"><div class="kpi-bar-top" style="background:#0EA5E9"></div>
-      <div class="kpi-lbl">Em Terceiros</div>
-      <div class="kpi-val">${procsTc.toLocaleString('pt-BR')}</div>
+      <div class="kpi-lbl">Em Terceiros</div><div class="kpi-val">${procsTc.toLocaleString('pt-BR')}</div>
       <div class="kpi-sub">processos distintos</div>
-      <div class="kpi-track"><div class="kpi-fill" style="width:${(ptc*100).toFixed(1)}%;background:#0EA5E9"></div></div>
-    </div>
+      <div class="kpi-track"><div class="kpi-fill" style="width:${(ptc*100).toFixed(1)}%;background:#0EA5E9"></div></div></div>
     <div class="kpi"><div class="kpi-bar-top" style="background:#0D9488"></div>
-      <div class="kpi-lbl">Retornados (100%)</div>
-      <div class="kpi-val">${procsRt.toLocaleString('pt-BR')}</div>
+      <div class="kpi-lbl">Retornados (100%)</div><div class="kpi-val">${procsRt.toLocaleString('pt-BR')}</div>
       <div class="kpi-sub">${(prt*100).toFixed(1)}% dos processos</div>
-      <div class="kpi-track"><div class="kpi-fill" style="width:${(prt*100).toFixed(1)}%;background:#0D9488"></div></div>
-    </div>
+      <div class="kpi-track"><div class="kpi-fill" style="width:${(prt*100).toFixed(1)}%;background:#0D9488"></div></div></div>
     <div class="kpi"><div class="kpi-bar-top" style="background:#EAB308"></div>
-      <div class="kpi-lbl">Aguardando NF Sa\u00edda</div>
-      <div class="kpi-val">${aguardando.toLocaleString('pt-BR')}</div>
+      <div class="kpi-lbl">Aguardando NF Sa\u00edda</div><div class="kpi-val">${aguardando.toLocaleString('pt-BR')}</div>
       <div class="kpi-sub">processos aguardando</div>
-      <div class="kpi-track"><div class="kpi-fill" style="width:${(aguardando/Math.max(totalProcs,1)*100).toFixed(1)}%;background:#EAB308"></div></div>
-    </div>
+      <div class="kpi-track"><div class="kpi-fill" style="width:${(aguardando/Math.max(totalProcs,1)*100).toFixed(1)}%;background:#EAB308"></div></div></div>
     <div class="kpi"><div class="kpi-bar-top" style="background:var(--blue)"></div>
-      <div class="kpi-lbl">Dias M\u00e9d. em Terceiros</div>
-      <div class="kpi-val">${avgDias}</div>
-      <div class="kpi-sub">M\u00e1x: ${maxDias}d \u00b7 ${diasArr.length} itens</div>
-    </div>
+      <div class="kpi-lbl">Dias M\u00e9d. em Terceiros</div><div class="kpi-val">${avgDias}</div>
+      <div class="kpi-sub">M\u00e1x: ${maxDias}d \u00b7 ${diasArr.length} itens</div></div>
     <div class="kpi"><div class="kpi-bar-top" style="background:#0EA5E9"></div>
       <div class="kpi-lbl">Valor em Terceiros</div>
       <div class="kpi-val" style="font-size:18px">${fmtCur(vtc)}</div>
-      <div class="kpi-sub">${procsTc} processos</div>
-    </div>`;
+      <div class="kpi-sub">${procsTc} processos</div></div>`;
 }
 
 function chartColors(){
   const dk=document.documentElement.getAttribute('data-theme')==='dark';
   return{text:dk?'#94A3B8':'#64748B',grid:dk?'#1E3A5F':'#E2E8F0'};
 }
-function rebuildCharts(){ if(filtered.length||raw.length) renderCharts(); }
+function rebuildCharts(){if(filtered.length||raw.length)renderCharts();}
 
 function renderCharts(){
   const C=chartColors();
-  Chart.defaults.color=C.text;
-  Chart.defaults.font.family='Inter';
-  Chart.defaults.font.size=11;
-  if(window.ChartDataLabels) Chart.register(ChartDataLabels);
+  Chart.defaults.color=C.text;Chart.defaults.font.family='Inter';Chart.defaults.font.size=11;
+  if(window.ChartDataLabels)Chart.register(ChartDataLabels);
 
+  // Agrupar processos
   const pm={};
-  const pvMap={}; // processo -> valor total
   filtered.forEach(r=>{
     const p=r['Processo']||'N/A';
-    if(!pm[p]) pm[p]={tc:0,rt:0,ab:0,total:0};
+    if(!pm[p])pm[p]={tc:0,rt:0,ab:0,total:0,pnsTc:new Set(),pnsRt:new Set()};
     pm[p].total++;
-    if(r._status==='Em Terceiros') pm[p].tc++;
-    else if(r._status==='Retornado') pm[p].rt++;
+    if(r._status==='Em Terceiros'){pm[p].tc++;pm[p].pnsTc.add(r['PN']||'');}
+    else if(r._status==='Retornado'){pm[p].rt++;pm[p].pnsRt.add(r['PN']||'');}
     else pm[p].ab++;
-    pvMap[p]=(pvMap[p]||0)+r._valor;
   });
-
   let procAb=0,procTc=0,procRt=0;
-  Object.values(pm).forEach(v=>{
-    if(v.ab>0) procAb++;
-    else if(v.tc>0) procTc++;
-    else procRt++;
-  });
+  Object.values(pm).forEach(v=>{if(v.ab>0)procAb++;else if(v.tc>0)procTc++;else procRt++;});
   const totalProc=procAb+procTc+procRt||1;
 
-  if(charts.st) charts.st.destroy();
+  // DONUT
+  if(charts.st)charts.st.destroy();
   charts.st=new Chart(document.getElementById('cStatus'),{
     type:'doughnut',
-    data:{
-      labels:['Aguard. NF de Saída','Em Terceiros','Retornado'],
-      datasets:[{
-        data:[procAb,procTc,procRt],
-        backgroundColor:['#EAB308','#0EA5E9','#0D9488'],
-        borderWidth:2,borderColor:'transparent',hoverOffset:6
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,cutout:'62%',
-      plugins:{
-        legend:{position:'bottom',labels:{padding:8,boxWidth:9,color:C.text}},
+    data:{labels:['Aguard. NF de Sa\u00edda','Em Terceiros','Retornado'],
+      datasets:[{data:[procAb,procTc,procRt],backgroundColor:['#EAB308','#0EA5E9','#0D9488'],borderWidth:2,borderColor:'transparent',hoverOffset:6}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+      plugins:{legend:{position:'bottom',labels:{padding:8,boxWidth:9,color:C.text}},
         tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${ctx.raw} processos (${(ctx.raw/totalProc*100).toFixed(1)}%)`}},
-        datalabels:{color:'#fff',font:{weight:'700',size:12},formatter:(v)=>v>0?v:'',textShadowBlur:3,textShadowColor:'rgba(0,0,0,.4)'}
-      }
-    }
+        datalabels:{color:'#fff',font:{weight:'700',size:12},formatter:(v)=>v>0?v:'',textShadowBlur:3,textShadowColor:'rgba(0,0,0,.4)'}}}
   });
 
-  const allProc=Object.entries(pm).sort((a,b)=>b[1].total-a[1].total).slice(0,8);
-  const barH=Math.max(240,allProc.length*30+40);
-  const wrap=document.getElementById('wrapProcesso');
-  if(wrap) wrap.style.height=barH+'px';
-  if(charts.pr) charts.pr.destroy();
-  charts.pr=new Chart(document.getElementById('cProcesso'),{
-    type:'bar',
-    data:{
-      labels:allProc.map(([p])=>p),
-      datasets:[{
-        label:'Itens',
-        data:allProc.map(([,v])=>v.total),
-        backgroundColor:allProc.map(([,v])=>v.ab>0?'#EAB308':v.tc>0?'#0EA5E9':'#0D9488'),
-        borderRadius:4,borderSkipped:false
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,indexAxis:'y',
-      plugins:{
-        legend:{display:false},
-        datalabels:{anchor:'end',align:'end',color:C.text,font:{weight:'700',size:11},formatter:(v)=>v,padding:{left:4}}
-      },
-      scales:{
-        x:{display:false},
-        y:{grid:{display:false},border:{display:false},ticks:{color:C.text}}
-      },
-      layout:{padding:{right:35}}
-    }
-  });
-
-  const _mmRaw={};
-  raw.filter(r=>r._status==='Em Terceiros'&&r._dtNF).forEach(r=>{
-    const k=`${r._dtNF.getFullYear()}-${String(r._dtNF.getMonth()+1).padStart(2,'0')}`;
-    _mmRaw[k]=(_mmRaw[k]||0)+r._valor;
-  });
+  // SALDO EM TERCEIROS POR MÊS (último dia de cada mês)
   const _allDates=raw.filter(r=>r._dtNF).map(r=>r._dtNF);
   const _minDate=_allDates.length?new Date(Math.min(..._allDates)):new Date();
   const _now=new Date();
@@ -748,140 +533,148 @@ function renderCharts(){
     _fullMonths.push(`${_cur.getFullYear()}-${String(_cur.getMonth()+1).padStart(2,'0')}`);
     _cur=new Date(_cur.getFullYear(),_cur.getMonth()+1,1);
   }
-  const months=_fullMonths.map(k=>[k,_mmRaw[k]||0]);
+  const _mmSaldo={};
+  _fullMonths.forEach(k=>{
+    const[y,m]=k.split('-').map(Number);
+    const lastDay=new Date(y,m,0,23,59,59);
+    let total=0;
+    raw.forEach(r=>{
+      if(!r._dtNF||r._dtNF>lastDay)return;
+      if(r._dtRet&&r._dtRet<=lastDay)return;
+      total+=r._valor;
+    });
+    _mmSaldo[k]=total;
+  });
+  const months=_fullMonths.map(k=>[k,_mmSaldo[k]||0]);
   const vals=months.map(([,v])=>v);
-  if(charts.mn) charts.mn.destroy();
+  if(charts.mn)charts.mn.destroy();
   charts.mn=new Chart(document.getElementById('cMes'),{
     type:'line',
     data:{
-      labels:months.map(([k])=>{const[y,m]=k.split('-');return new Date(+y,+m-1,1).toLocaleDateString('pt-BR',{month:'short',year:'2-digit'})}),
-
-      datasets:[{
-        data:vals,
-        borderColor:'#0D9488',
-        backgroundColor:'rgba(22,163,74,.1)',
-        fill:true,tension:.3,
-        pointRadius:4,pointBackgroundColor:'#0D9488',
-        pointBorderColor:'var(--surface)',pointBorderWidth:2
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{display:false},
-        datalabels:{
-          anchor:'top',align:'top',offset:5,
-          font:{weight:'600',size:10},
-          color:(ctx)=>{
-            const i=ctx.dataIndex;
-            if(i===0) return C.text;
-            return vals[i]>=vals[i-1]?'#0D9488':'#DC2626';
-          },
+      labels:months.map(([k])=>{
+        const[y,m]=k.split('-');
+        const d=new Date(+y,+m-1,1);
+        const mn=d.toLocaleDateString('pt-BR',{month:'long'});
+        return mn.charAt(0).toUpperCase()+mn.slice(1)+'/'+y;
+      }),
+      datasets:[{data:vals,borderColor:'#0D9488',backgroundColor:'rgba(13,148,136,.1)',
+        fill:true,tension:.3,pointRadius:4,pointBackgroundColor:'#0D9488',pointBorderColor:'var(--surface)',pointBorderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        datalabels:{anchor:'top',align:'top',offset:5,font:{weight:'600',size:10},
+          color:(ctx)=>{const i=ctx.dataIndex;if(i===0)return C.text;return vals[i]>=vals[i-1]?'#0D9488':'#DC2626';},
           formatter:(v)=>{
-            if(v>=1000000) return 'R$ '+( v/1000000).toFixed(1)+'M';
-            if(v>=1000) return 'R$ '+Math.round(v/1000)+'k';
-            return 'R$ '+Math.round(v);
-          }
-        }
-      },
-      scales:{
-        x:{grid:{display:false},border:{display:false},ticks:{color:C.text}},
-        y:{display:false}
-      },
-      layout:{padding:{top:30}}
-    }
+            if(v>=1000000)return'R$ '+(v/1000000).toFixed(1)+'M';
+            if(v>=1000)return'R$ '+Math.round(v/1000)+'k';
+            return v>0?'R$ '+Math.round(v):'R$ 0';
+          }}},
+      scales:{x:{grid:{display:false},border:{display:false},ticks:{color:C.text,maxRotation:45}},y:{display:false}},
+      layout:{padding:{top:30}}}
   });
 
+  // PROCESSOS POR PN's (só em terceiros + aguardando, barras horizontais, todos)
+  const pnMap={};
+  filtered.filter(r=>r._status==='Em Terceiros'||r._status==='Em Aberto').forEach(r=>{
+    const p=r['Processo']||'N/A';
+    if(!pnMap[p])pnMap[p]=new Set();
+    pnMap[p].add(r['PN']||'');
+  });
+  const allProcPN=Object.entries(pnMap).map(([p,s])=>([p,s.size])).sort((a,b)=>b[1]-a[1]);
+  const colH=Math.max(260,allProcPN.length*28+60);
+  const wrapP=document.getElementById('wrapProcesso');
+  if(wrapP)wrapP.style.height=colH+'px';
+  if(charts.pr)charts.pr.destroy();
+  charts.pr=new Chart(document.getElementById('cProcesso'),{
+    type:'bar',
+    data:{labels:allProcPN.map(([p])=>p),
+      datasets:[{data:allProcPN.map(([,v])=>v),
+        backgroundColor:allProcPN.map(([p])=>(pm[p]&&pm[p].ab>0)?'#EAB308':'#0EA5E9'),
+        borderRadius:4,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{display:false},
+        datalabels:{anchor:'end',align:'end',color:C.text,font:{weight:'700',size:11},formatter:(v)=>v,padding:{left:4}}},
+      scales:{x:{display:false},y:{grid:{display:false},border:{display:false},ticks:{color:C.text}}},
+      layout:{padding:{right:35}}}
+  });
+
+  // RANKING VALOR (barras horizontais)
   const tcItems=filtered.filter(r=>r._status==='Em Terceiros');
-  const pvTcMap={};
-  const pqTcMap={};
+  const pvTcMap={},pqTcMap={};
   tcItems.forEach(r=>{
     const p=r['Processo']||'N/A';
     pvTcMap[p]=(pvTcMap[p]||0)+r._valor;
     pqTcMap[p]=(pqTcMap[p]||0)+parseNum(r['Quantidade']);
   });
   const rankProc=Object.entries(pvTcMap).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  if(charts.rk) charts.rk.destroy();
+  if(charts.rk)charts.rk.destroy();
   charts.rk=new Chart(document.getElementById('cRanking'),{
     type:'bar',
-    data:{
-      labels:rankProc.map(([p])=>p),
-      datasets:[{
-        data:rankProc.map(([,v])=>v),
-        backgroundColor:'#0EA5E9',
-        borderRadius:4,borderSkipped:false
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,indexAxis:'y',
-      plugins:{
-        legend:{display:false},
-        datalabels:{
-          anchor:'end',align:'end',
-          color:C.text,font:{weight:'600',size:10},
-          formatter:(v)=>'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0}),
-          padding:{left:4}
-        }
-      },
-      scales:{
-        x:{display:false},
-        y:{grid:{display:false},border:{display:false},ticks:{color:C.text}}
-      },
-      layout:{padding:{right:130}}
-    }
+    data:{labels:rankProc.map(([p])=>p),
+      datasets:[{data:rankProc.map(([,v])=>v),backgroundColor:'#0EA5E9',borderRadius:4,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{display:false},
+        datalabels:{anchor:'end',align:'end',color:C.text,font:{weight:'600',size:10},
+          formatter:(v)=>'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0}),padding:{left:4}}},
+      scales:{x:{display:false},y:{grid:{display:false},border:{display:false},ticks:{color:C.text}}},
+      layout:{padding:{right:130}}}
   });
 
+  // RANKING QTD (barras horizontais)
   const rankQtd=Object.entries(pqTcMap).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  if(charts.cl) charts.cl.destroy();
+  if(charts.cl)charts.cl.destroy();
   charts.cl=new Chart(document.getElementById('cColuna'),{
     type:'bar',
-    data:{
-      labels:rankQtd.map(([p])=>p),
-      datasets:[{
-        data:rankQtd.map(([,v])=>v),
-        backgroundColor:'#0D9488',
-        borderRadius:4,borderSkipped:false
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{display:false},
-        datalabels:{
-          anchor:'end',align:'top',offset:4,
-          color:C.text,font:{weight:'800',size:13},
-          formatter:(v)=>v.toLocaleString('pt-BR')
-        }
-      },
-      scales:{
-        x:{grid:{display:false},border:{display:false},ticks:{color:C.text,maxRotation:45}},
-        y:{display:false}
-      },
-      layout:{padding:{top:30}}
-    }
+    data:{labels:rankQtd.map(([p])=>p),
+      datasets:[{data:rankQtd.map(([,v])=>v),backgroundColor:'#0D9488',borderRadius:4,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{display:false},
+        datalabels:{anchor:'end',align:'end',color:C.text,font:{weight:'700',size:11},
+          formatter:(v)=>v.toLocaleString('pt-BR'),padding:{left:4}}},
+      scales:{x:{display:false},y:{grid:{display:false},border:{display:false},ticks:{color:C.text}}},
+      layout:{padding:{right:50}}}
   });
+
+  // RETORNO PARCIAL
+  const partial=Object.entries(pm).filter(([,v])=>v.tc>0&&v.rt>0).sort((a,b)=>b[1].pnsTc.size-a[1].pnsTc.size);
+  const partialCard=document.getElementById('partialCard');
+  if(partialCard){
+    if(partial.length>0){
+      partialCard.style.display='block';
+      const pH=Math.max(200,partial.length*32+60);
+      const wP=document.getElementById('wrapPartial');
+      if(wP)wP.style.height=pH+'px';
+      if(charts.pt)charts.pt.destroy();
+      charts.pt=new Chart(document.getElementById('cPartial'),{
+        type:'bar',
+        data:{labels:partial.map(([p])=>p),
+          datasets:[
+            {label:"PN's Retornados",data:partial.map(([,v])=>v.pnsRt.size),backgroundColor:'#0D9488',borderRadius:3,borderSkipped:false},
+            {label:"PN's Em Terceiros",data:partial.map(([,v])=>v.pnsTc.size),backgroundColor:'#0EA5E9',borderRadius:3,borderSkipped:false}
+          ]},
+        options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+          plugins:{legend:{position:'bottom',labels:{padding:8,boxWidth:9,color:C.text}},
+            datalabels:{anchor:'end',align:'end',color:C.text,font:{weight:'600',size:10},formatter:(v)=>v>0?v:''}},
+          scales:{x:{display:false},y:{grid:{display:false},border:{display:false},ticks:{color:C.text}}},
+          layout:{padding:{right:35}}}
+      });
+    }else{partialCard.style.display='none';}
+  }
 }
 
 function renderTables(){
-  const today=new Date();
-
-  const tc=filtered.filter(r=>r._status==='Em Terceiros')
-    .sort((a,b)=>(a['PN']||'').localeCompare(b['PN']||'','pt-BR'));
+  const tc=filtered.filter(r=>r._status==='Em Terceiros').sort((a,b)=>(a['PN']||'').localeCompare(b['PN']||'','pt-BR'));
   document.getElementById('cntTerceiros').textContent=tc.length;
   const vtc=tc.reduce((s,r)=>s+r._valor,0);
   document.getElementById('valTerceiros').textContent=vtc>0?fmtCur(vtc):'';
   const criticos=tc.filter(r=>r._diasFora>60).length;
   document.getElementById('diasAlert').textContent=criticos>0?`⚠ ${criticos} acima de 60 dias`:'';
   renderPage('tTerceiros','bTerceiros','pageTerceiros',tc,rowTerceiros);
-
   const ent=[...filtered].sort((a,b)=>(a['PN']||'').localeCompare(b['PN']||'','pt-BR'));
   document.getElementById('cntEntrada').textContent=ent.length;
   const vEnt=ent.reduce((s,r)=>s+r._valor,0);
   document.getElementById('valEntrada').textContent=vEnt>0?fmtCur(vEnt):'';
   renderPage('tEntrada','bEntrada','pageEntrada',ent,rowEntrada);
-
-  const dev=filtered.filter(r=>r._status==='Retornado')
-    .sort((a,b)=>(a['PN']||'').localeCompare(b['PN']||'','pt-BR'));
+  const dev=filtered.filter(r=>r._status==='Retornado').sort((a,b)=>(a['PN']||'').localeCompare(b['PN']||'','pt-BR'));
   document.getElementById('cntDev').textContent=dev.length;
   renderPage('tDev','bDev','pageDev',dev,rowDev);
 }
@@ -889,99 +682,62 @@ function renderTables(){
 function rowTerceiros(r){
   const d=r._diasFora;
   const dc=d!==null?(d>60?`<span class="dias-warn">${d}d ⚠</span>`:d>30?`<span style="color:var(--orange);font-weight:600">${d}d</span>`:`<span class="dias-ok">${d}d</span>`):'—';
-  return `<tr style="background:rgba(14,165,233,0.06)">
-    <td><span class="ptag">${r['Processo']||'—'}</span></td>
-    <td>${r['NF ENTRADA']||'—'}</td>
-    <td>${r['Container']||'—'}</td>
-    <td style="font-weight:600">${r['PN']||'—'}</td>
+  return`<tr style="background:rgba(14,165,233,0.06)">
+    <td><span class="ptag">${r['Processo']||'—'}</span></td><td>${r['NF ENTRADA']||'—'}</td>
+    <td>${r['Container']||'—'}</td><td style="font-weight:600">${r['PN']||'—'}</td>
     <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis" title="${r['Descrição']||''}">${r['Descrição']||'—'}</td>
-    <td style="text-align:right">${r['Quantidade']||'—'}</td>
-    <td>${r['NF de Saída']||'—'}</td>
-    <td>${fmtDate(r['Data NF'])}</td>
-    <td style="text-align:center">${dc}</td>
-    <td>${r['Responsável']||'—'}</td>
-    <td style="text-align:right">${r._valor>0?fmtCur(r._valor):'—'}</td>
-    <td>${r['MIGO']||'—'}</td>
-  </tr>`;
+    <td style="text-align:right">${r['Quantidade']||'—'}</td><td>${r['NF de Saída']||'—'}</td>
+    <td>${fmtDate(r['Data NF'])}</td><td style="text-align:center">${dc}</td>
+    <td>${r['Responsável']||'—'}</td><td style="text-align:right">${r._valor>0?fmtCur(r._valor):'—'}</td>
+    <td>${r['MIGO']||'—'}</td></tr>`;
 }
-
 function rowEntrada(r){
   const bg=r._status==='Em Aberto'?'rgba(234,179,8,0.06)':r._status==='Em Terceiros'?'rgba(14,165,233,0.06)':'rgba(13,148,136,0.06)';
-  return `<tr style="background:${bg}">
-    <td><span class="ptag">${r['Processo']||'—'}</span></td>
-    <td>${r['NF ENTRADA']||'—'}</td>
-    <td>${r['Container']||'—'}</td>
-    <td style="font-weight:600">${r['PN']||'—'}</td>
-    <td style="text-align:right">${r['Quantidade']||'—'}</td>
-    <td>${fmtDate(r['Data Emissão'])}</td>
-    <td style="text-align:right">${r._valor>0?fmtCur(r._valor):'—'}</td>
-    <td>${statusBadge(r._status)}</td>
-  </tr>`;
+  return`<tr style="background:${bg}">
+    <td><span class="ptag">${r['Processo']||'—'}</span></td><td>${r['NF ENTRADA']||'—'}</td>
+    <td>${r['Container']||'—'}</td><td style="font-weight:600">${r['PN']||'—'}</td>
+    <td style="text-align:right">${r['Quantidade']||'—'}</td><td>${fmtDate(r['Data Emissão'])}</td>
+    <td style="text-align:right">${r._valor>0?fmtCur(r._valor):'—'}</td><td>${statusBadge(r._status)}</td></tr>`;
 }
-
 function rowDev(r){
   const sRet=(r['Status Retorno']||'').trim();
-  return `<tr style="background:rgba(13,148,136,0.06)">
-    <td><span class="ptag">${r['Processo']||'—'}</span></td>
-    <td>${r['NF Retorno']||'—'}</td>
-    <td style="font-weight:600">${r['PN']||'—'}</td>
-    <td style="text-align:right">${r['Quantidade']||'—'}</td>
-    <td>${fmtDate(r['Data retorno'])}</td>
-    <td>${r['MIGO_3']||'—'}</td>
+  return`<tr style="background:rgba(13,148,136,0.06)">
+    <td><span class="ptag">${r['Processo']||'—'}</span></td><td>${r['NF Retorno']||'—'}</td>
+    <td style="font-weight:600">${r['PN']||'—'}</td><td style="text-align:right">${r['Quantidade']||'—'}</td>
+    <td>${fmtDate(r['Data retorno'])}</td><td>${r['MIGO_3']||'—'}</td>
     <td>${r['Responsável_4']||r['Responsável']||'—'}</td>
-    <td>${sRet?`<span class="badge ${sRet==='Finalizado'?'bg':'bb'}">${sRet}</span>`:'—'}</td>
-  </tr>`;
+    <td>${sRet?`<span class="badge ${sRet==='Finalizado'?'bg':'bb'}">${sRet}</span>`:'—'}</td></tr>`;
 }
 
 function renderPage(tId,bId,pgId,data,rowFn){
-  const pg=pages[tId]||0;
-  const start=pg*PAGE_SIZE, end=start+PAGE_SIZE;
-  const slice=data.slice(start,end);
+  const pg=pages[tId]||0,start=pg*PAGE_SIZE,end=start+PAGE_SIZE;
   const tbody=document.getElementById(bId);
-
-  if(!data.length){ tbody.innerHTML=`<tr><td colspan="20" class="empty">Nenhum registro encontrado</td></tr>`; }
-  else tbody.innerHTML=slice.map(rowFn).join('');
-
+  if(!data.length){tbody.innerHTML=`<tr><td colspan="20" class="empty">Nenhum registro encontrado</td></tr>`;}
+  else tbody.innerHTML=data.slice(start,end).map(rowFn).join('');
   const totalPgs=Math.ceil(data.length/PAGE_SIZE);
   const pgBar=document.getElementById(pgId);
-  if(totalPgs<=1){ pgBar.innerHTML=''; return; }
+  if(totalPgs<=1){pgBar.innerHTML='';return;}
   let html=`<span style="flex:1">${data.length} registros · Página ${pg+1} de ${totalPgs}</span>`;
   html+=`<button class="pgbtn" onclick="goPage('${tId}',${pg-1})" ${pg===0?'disabled':''}>‹ Ant</button>`;
-  const rangeStart=Math.max(0,pg-2), rangeEnd=Math.min(totalPgs-1,pg+2);
-  for(let i=rangeStart;i<=rangeEnd;i++){
-    html+=`<button class="pgbtn ${i===pg?'active':''}" onclick="goPage('${tId}',${i})">${i+1}</button>`;
-  }
+  const rs=Math.max(0,pg-2),re=Math.min(totalPgs-1,pg+2);
+  for(let i=rs;i<=re;i++)html+=`<button class="pgbtn ${i===pg?'active':''}" onclick="goPage('${tId}',${i})">${i+1}</button>`;
   html+=`<button class="pgbtn" onclick="goPage('${tId}',${pg+1})" ${pg>=totalPgs-1?'disabled':''}>Próx ›</button>`;
   pgBar.innerHTML=html;
 }
-
-function goPage(tId,pg){
-  pages[tId]=pg;
-  applyFilters();
-  document.getElementById(tId).scrollIntoView({behavior:'smooth',block:'start'});
-}
+function goPage(tId,pg){pages[tId]=pg;applyFilters();document.getElementById(tId).scrollIntoView({behavior:'smooth',block:'start'});}
 
 function sortTable(tId,col){
-  const bodyId = 'b'+tId.replace('t','');
-  const rows=[...document.getElementById(bodyId+''.replace('b','b')).querySelectorAll('tr:not(.totrow)')];
-  const dir=(sortState[tId+col]||1)*-1;
-  sortState[tId+col]=dir;
+  const rows=[...document.getElementById('b'+tId.slice(1)).querySelectorAll('tr')];
+  const dir=(sortState[tId+col]||1)*-1;sortState[tId+col]=dir;
   rows.sort((a,b)=>{
-    const av=(a.cells[col]?.textContent||'').trim();
-    const bv=(b.cells[col]?.textContent||'').trim();
-    const an=parseFloat(av.replace(/[^\d,-]/g,'').replace(',','.'));
-    const bn=parseFloat(bv.replace(/[^\d,-]/g,'').replace(',','.'));
-    if(!isNaN(an)&&!isNaN(bn)) return (an-bn)*dir;
-    return av.localeCompare(bv,'pt-BR')*dir;
+    const av=(a.cells[col]?.textContent||'').trim(),bv=(b.cells[col]?.textContent||'').trim();
+    const an=parseFloat(av.replace(/[^\d,-]/g,'').replace(',','.')),bn=parseFloat(bv.replace(/[^\d,-]/g,'').replace(',','.'));
+    if(!isNaN(an)&&!isNaN(bn))return(an-bn)*dir;return av.localeCompare(bv,'pt-BR')*dir;
   });
   const tbody=document.getElementById('b'+tId.slice(1));
-  if(tbody) rows.forEach(r=>tbody.appendChild(r));
+  if(tbody)rows.forEach(r=>tbody.appendChild(r));
 }
-
-function doRefresh(){
-  loadData();
-}
-
+function doRefresh(){loadData();}
 loadData();
 </script>
 </body>
