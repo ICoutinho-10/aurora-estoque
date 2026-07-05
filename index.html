@@ -152,14 +152,14 @@ footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);bor
   </div>
 
   <!-- ROW 1: Donut + PN's + Saldo Mês -->
-  <div class="charts-row" style="grid-template-columns:220px 1fr 1fr;margin-bottom:16px">
+  <div class="charts-row" style="grid-template-columns:200px 2fr 1fr;margin-bottom:16px">
     <div class="card">
       <div class="card-title">Status dos Processos</div>
       <div class="chart-wrap" style="height:260px"><canvas id="cStatus"></canvas></div>
     </div>
     <div class="card">
       <div class="card-title">Processos por PN's — Em Terceiros e Aguardando</div>
-      <div class="chart-wrap" id="wrapProcesso" style="height:260px"><canvas id="cProcesso"></canvas></div>
+      <div class="chart-wrap" id="wrapProcesso" style="height:240px"><canvas id="cProcesso"></canvas></div>
     </div>
     <div class="card">
       <div class="card-title">Saldo em Terceiros por Mês (último dia)</div>
@@ -168,7 +168,7 @@ footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);bor
   </div>
 
   <!-- ROW 2: Retorno Parcial + Rankings -->
-  <div class="charts-row" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:16px">
+  <div class="charts-row" id="row2Charts" style="grid-template-columns:1fr 1fr;margin-bottom:16px">
     <div class="card" id="partialCard" style="display:none">
       <div class="card-title">⚠️ Retorno Parcial — PNs Retornados vs Em Terceiros</div>
       <div class="chart-wrap" id="wrapPartial" style="height:260px"><canvas id="cPartial"></canvas></div>
@@ -649,9 +649,8 @@ function renderCharts(){
   if(partialCard){
     if(partial.length>0){
       partialCard.style.display='block';
-      // shrink ranking card to fit 3 columns
-      const rkCard=document.getElementById('rankingValCard');
-      if(rkCard) rkCard.style.display='block';
+      const row2=document.getElementById('row2Charts');
+      if(row2) row2.style.gridTemplateColumns='1fr 1fr 1fr';
       const pH=Math.max(200,partial.length*32+60);
       const wP=document.getElementById('wrapPartial');
       if(wP)wP.style.height=pH+'px';
@@ -671,7 +670,8 @@ function renderCharts(){
       });
     }else{
       partialCard.style.display='none';
-      // ranking takes 2 columns when partial is hidden
+      const row2=document.getElementById('row2Charts');
+      if(row2) row2.style.gridTemplateColumns='1fr 1fr';
     }
   }
 }
