@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="light">
+<html lang="pt-BR" data-theme="light" translate="no">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -437,27 +437,36 @@ function statusBadge(s){
 }
 
 async function fetchCSV(){
-  const url = CSV_DIRECT + '&nocache=' + Date.now();
-  const proxies = [
-    url,
-    'https://api.allorigins.win/raw?url=' + encodeURIComponent(CSV_DIRECT),
-    'https://corsproxy.io/?' + encodeURIComponent(CSV_DIRECT),
-    'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(CSV_DIRECT)
+  const nc = '&nocache=' + Date.now();
+  const sources = [
+    {label:'Direto', url: CSV_DIRECT + nc},
+    {label:'AllOrigins', url:'https://api.allorigins.win/raw?url='+encodeURIComponent(CSV_DIRECT+nc)},
+    {label:'CorsProxy', url:'https://corsproxy.io/?'+encodeURIComponent(CSV_DIRECT)},
+    {label:'CodeTabs',  url:'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(CSV_DIRECT)}
   ];
   let lastErr = null;
-  for(const u of proxies){
+  for(const src of sources){
     try{
+      document.getElementById('updTime').textContent = 'Tentando ' + src.label + '...';
       const r = await Promise.race([
-        fetch(u, {cache:'no-store'}),
-        new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),10000))
+        fetch(src.url, {cache:'no-store'}),
+        new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),12000))
       ]);
       if(r.ok){
         const txt = await r.text();
-        if(txt && txt.length > 200 && txt.includes('Processo')) return txt;
+        if(txt && txt.length > 100){
+          console.log('OK via', src.label, '| length:', txt.length);
+          return txt;
+        }
+      } else {
+        console.warn(src.label, 'HTTP', r.status);
       }
-    } catch(e){ lastErr = e; }
+    } catch(e){
+      console.warn(src.label, 'falhou:', e.message);
+      lastErr = e;
+    }
   }
-  throw lastErr || new Error('Falha ao carregar dados');
+  throw lastErr || new Error('Todas as fontes falharam');
 }
 
 async function loadData(){
@@ -495,7 +504,8 @@ async function loadData(){
           4️⃣ Dados carregam em segundos ✓
         </div>
         <div style="margin-top:12px;padding:6px 12px;background:var(--surface2);border-radius:6px;font-size:10px;color:var(--muted);display:inline-block">
-          Erro técnico: ${e.message}
+          Erro: ${e.message}<br>
+        <small>Abra o console do navegador (F12) e veja qual fonte falhou</small>
         </div>
       </div>`;
   }
