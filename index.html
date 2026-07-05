@@ -10,7 +10,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 <style>
 :root{--bg:#F1F5F9;--surface:#FFFFFF;--surface2:#F8FAFC;--border:#E2E8F0;--txt:#0A1628;--txt2:#475569;--muted:#94A3B8;--teal:#0D9488;--teal-lt:#CCFBF1;--teal-dk:#0F766E;--blue:#1D4ED8;--orange:#EA580C;--red:#DC2626;--green:#0D9488;--sh:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);--sh2:0 4px 12px rgba(0,0,0,.1);--r:12px;--r2:8px}
-[data-theme=dark]{--bg:#060D1A;--surface:#0F1F35;--surface2:#0A1628;--border:#1E3A5F;--txt:#E2E8F0;--txt2:#94A3B8;--muted:#475569;--sh:0 1px 3px rgba(0,0,0,.4);--sh2:0 4px 12px rgba(0,0,0,.5)}
+[data-theme=dark]{--bg:#0F1B2D;--surface:#1A2B40;--surface2:#1E3048;--border:#2A4060;--txt:#F0F6FF;--txt2:#A8BECE;--muted:#607080;--sh:0 1px 3px rgba(0,0,0,.3);--sh2:0 4px 12px rgba(0,0,0,.4)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;transition:background .2s,color .2s}
 .hdr{background:var(--surface);border-bottom:1px solid var(--border);height:70px;display:flex;align-items:center;gap:14px;padding:0 20px;position:sticky;top:0;z-index:200;box-shadow:var(--sh)}
@@ -152,7 +152,7 @@ footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);bor
   </div>
 
   <!-- ROW 1: Donut + Saldo Mês -->
-  <div class="charts-row" style="grid-template-columns:260px 1fr">
+  <div class="charts-row" style="grid-template-columns:240px 1fr">
     <div class="card">
       <div class="card-title">Status dos Processos</div>
       <div class="chart-wrap" style="height:220px"><canvas id="cStatus"></canvas></div>
@@ -166,7 +166,7 @@ footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);bor
   <!-- ROW 2: Processos por PN's (todos em terceiros) -->
   <div class="card" style="margin-bottom:16px">
     <div class="card-title">Processos por PN's — Em Terceiros e Aguardando NF Saída</div>
-    <div class="chart-wrap" id="wrapProcesso" style="height:260px;overflow-y:auto"><canvas id="cProcesso"></canvas></div>
+    <div class="chart-wrap" id="wrapProcesso" style="height:300px"><canvas id="cProcesso"></canvas></div>
   </div>
 
   <!-- ROW 3: Rankings -->
@@ -247,6 +247,18 @@ footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);bor
   </div>
 </div>
 
+<div id="summarySection" class="main" style="padding-top:0;padding-bottom:24px;max-width:1700px;margin:0 auto">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 24px;box-shadow:var(--sh)">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:12px">
+      <span style="font-size:16px">📋</span>
+      <span style="font-size:13px;font-weight:700;color:var(--txt);letter-spacing:-.01em">Resumo Executivo — Controle de Estoque Aurora</span>
+      <span style="margin-left:auto;font-size:11px;color:var(--muted)" id="summaryDate"></span>
+    </div>
+    <div id="summaryContent" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;font-size:12px;color:var(--txt2)">
+      <div style="color:var(--muted);text-align:center;padding:20px">Carregando resumo...</div>
+    </div>
+  </div>
+</div>
 <footer>BYD Pós-Vendas · Aurora · <span id="totalReg">—</span></footer>
 
 <script>
@@ -356,7 +368,7 @@ async function loadData(){
     });
     populateDataLists();
     document.getElementById('totalReg').textContent=raw.length+' registros carregados';
-    applyFilters();setUpdTime();
+    applyFilters();setUpdTime();renderSummary();
   }catch(e){
     console.error(e);
     document.getElementById('kpiGrid').innerHTML=`<div style="grid-column:1/-1;padding:32px;text-align:center;font-size:13px">
@@ -572,7 +584,7 @@ function renderCharts(){
       layout:{padding:{top:30}}}
   });
 
-  // PROCESSOS POR PN's (só em terceiros + aguardando, barras horizontais, todos)
+  // PROCESSOS POR PN's — colunas verticais
   const pnMap={};
   filtered.filter(r=>r._status==='Em Terceiros'||r._status==='Em Aberto').forEach(r=>{
     const p=r['Processo']||'N/A';
@@ -580,9 +592,6 @@ function renderCharts(){
     pnMap[p].add(r['PN']||'');
   });
   const allProcPN=Object.entries(pnMap).map(([p,s])=>([p,s.size])).sort((a,b)=>b[1]-a[1]);
-  const colH=Math.max(260,allProcPN.length*28+60);
-  const wrapP=document.getElementById('wrapProcesso');
-  if(wrapP)wrapP.style.height=colH+'px';
   if(charts.pr)charts.pr.destroy();
   charts.pr=new Chart(document.getElementById('cProcesso'),{
     type:'bar',
@@ -590,11 +599,13 @@ function renderCharts(){
       datasets:[{data:allProcPN.map(([,v])=>v),
         backgroundColor:allProcPN.map(([p])=>(pm[p]&&pm[p].ab>0)?'#EAB308':'#0EA5E9'),
         borderRadius:4,borderSkipped:false}]},
-    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+    options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},
-        datalabels:{anchor:'end',align:'end',color:C.text,font:{weight:'700',size:11},formatter:(v)=>v,padding:{left:4}}},
-      scales:{x:{display:false},y:{grid:{display:false},border:{display:false},ticks:{color:C.text}}},
-      layout:{padding:{right:35}}}
+        datalabels:{anchor:'end',align:'top',offset:4,color:C.text,font:{weight:'700',size:11},formatter:(v)=>v}},
+      scales:{
+        x:{grid:{display:false},border:{display:false},ticks:{color:C.text,maxRotation:45,minRotation:30,font:{size:10}}},
+        y:{display:false}},
+      layout:{padding:{top:28}}}
   });
 
   // RANKING VALOR (barras horizontais)
@@ -738,6 +749,79 @@ function sortTable(tId,col){
   if(tbody)rows.forEach(r=>tbody.appendChild(r));
 }
 function doRefresh(){loadData();}
+
+function renderSummary(){
+  const today = new Date();
+  document.getElementById('summaryDate').textContent =
+    'Atualizado em ' + today.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}) +
+    ' às ' + today.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+
+  if(!filtered.length){ document.getElementById('summaryContent').innerHTML='<div style="color:var(--muted);grid-column:1/-1;text-align:center;padding:16px">Sem dados para o filtro atual.</div>'; return; }
+
+  // Calcular métricas
+  const _pm={};
+  filtered.forEach(r=>{
+    const p=r['Processo']||'N/A';
+    if(!_pm[p])_pm[p]={tc:0,rt:0,ab:0,total:0,valor:0,pnsTc:new Set()};
+    _pm[p].total++;_pm[p].valor+=r._valor;
+    if(r._status==='Em Terceiros'){_pm[p].tc++;_pm[p].pnsTc.add(r['PN']||'');}
+    else if(r._status==='Retornado')_pm[p].rt++;
+    else _pm[p].ab++;
+  });
+  const totalProcs=Object.keys(_pm).length;
+  const procsTc=Object.values(_pm).filter(v=>v.tc>0).length;
+  const procsRt=Object.values(_pm).filter(v=>v.rt===v.total&&v.total>0).length;
+  const aguardando=Object.values(_pm).filter(v=>v.ab>0).length;
+  const vtc=filtered.filter(r=>r._status==='Em Terceiros').reduce((s,r)=>s+r._valor,0);
+  const vTotal=filtered.reduce((s,r)=>s+r._valor,0);
+  const diasArr=filtered.filter(r=>r._diasFora!==null&&r._diasFora>=0).map(r=>r._diasFora);
+  const avgDias=diasArr.length>0?Math.round(diasArr.reduce((a,b)=>a+b,0)/diasArr.length):0;
+  const criticos=filtered.filter(r=>r._diasFora>60).length;
+  const parciais=Object.entries(_pm).filter(([,v])=>v.tc>0&&v.rt>0).length;
+
+  // Top processo por valor em terceiros
+  const topProc=Object.entries(_pm).filter(([,v])=>v.tc>0).sort((a,b)=>b[1].valor-a[1].valor)[0];
+  const topProcStr=topProc?`<strong>${topProc[0]}</strong> (${fmtCur(topProc[1].valor)})`:'—';
+
+  // Top processo por PNs em terceiros
+  const topPN=Object.entries(_pm).filter(([,v])=>v.tc>0).sort((a,b)=>b[1].pnsTc.size-a[1].pnsTc.size)[0];
+  const topPNStr=topPN?`<strong>${topPN[0]}</strong> (${topPN[1].pnsTc.size} PN's)`:'—';
+
+  const pctRt=(totalProcs>0?(procsRt/totalProcs*100).toFixed(1):0)+'%';
+  const pctTc=(totalProcs>0?(procsTc/totalProcs*100).toFixed(1):0)+'%';
+
+  function item(icon,label,value,color='var(--teal)'){
+    return`<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:16px;flex-shrink:0">${icon}</span>
+      <div><div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">${label}</div>
+      <div style="font-size:13px;font-weight:600;color:var(--txt)">${value}</div></div>
+    </div>`;
+  }
+
+  document.getElementById('summaryContent').innerHTML=`
+    <div>
+      <div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">📊 Visão Geral</div>
+      ${item('📦','Total de Processos',`${totalProcs} processos · ${filtered.length.toLocaleString('pt-BR')} itens`)}
+      ${item('🔄','Taxa de Conclusão',`${pctRt} concluídos (${procsRt} de ${totalProcs} processos)`)}
+      ${item('🚛','Em Terceiros',`${procsTc} processos (${pctTc}) · ${fmtCur(vtc)}`)}
+      ${item('⏳','Aguardando NF de Saída',`${aguardando} processo${aguardando!==1?'s':''} pendente${aguardando!==1?'s':''}`)}
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">⏱️ Análise Temporal</div>
+      ${item('📅','Tempo Médio em Terceiros',`${avgDias} dias`)}
+      ${item('⚠️','Processos Críticos (+60 dias)',criticos>0?`<span style="color:var(--red);font-weight:700">${criticos} ite${criticos!==1?'ns':'m'} acima de 60 dias</span>`:'<span style="color:#0D9488">Nenhum item crítico</span>')}
+      ${item('🔀','Retorno Parcial',parciais>0?`<span style="color:var(--orange)">${parciais} processo${parciais!==1?'s':''} com retorno incompleto</span>`:'<span style="color:#0D9488">Todos os processos com NF de Retorno estão completos</span>')}
+      ${item('💰','Valor Total na Base',fmtCur(vTotal))}
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">🏆 Destaques</div>
+      ${item('1️⃣','Maior Processo por Valor em Terceiros',topProcStr)}
+      ${item('2️⃣','Maior Processo por PN's em Terceiros',topPNStr)}
+      ${item('📈','Status do Estoque',procsRt===totalProcs?'<span style="color:#0D9488;font-weight:700">✓ Todos os processos finalizados</span>':procsTc===0?'<span style="color:#0D9488">Nenhum item em terceiros</span>':`${procsTc} processo${procsTc!==1?'s':''} requerem atenção`)}
+      ${item('🗓️','Última Atualização',today.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'}))}
+    </div>`;
+}
+
 loadData();
 </script>
 </body>
