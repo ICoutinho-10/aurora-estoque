@@ -594,9 +594,6 @@ document.getElementById('fProcesso').addEventListener('input',e=>{
 
 function renderKPIs(){
   const today = new Date();
-  const totalProcs = new Set(filtered.map(r=>r['Processo']).filter(Boolean)).size;
-  const procsTc    = new Set(filtered.filter(r=>r._status==='Em Terceiros').map(r=>r['Processo']).filter(Boolean)).size;
-  const procsRt    = new Set(filtered.filter(r=>r._status==='Retornado').map(r=>r['Processo']).filter(Boolean)).size;
   const _pmKpi = {};
   filtered.forEach(r=>{
     const p=r['Processo']||'N/A';
