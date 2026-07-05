@@ -338,7 +338,8 @@ footer{padding:14px 20px;text-align:center;font-size:11px;color:var(--muted);bor
 <footer>BYD Pós-Vendas · Aurora · <span id="totalReg">—</span></footer>
 
 <script>
-const CSV_DIRECT = 'https://docs.google.com/spreadsheets/d/17ZclxoAJXJNw2ejkgS-dqFH1ZCFL1s4wkYtsNBgdi98/export?format=csv&gid=0';
+const CSV_DIRECT = 'https://docs.google.com/spreadsheets/d/17ZclxoAJXJNw2ejkgS-dqFH1ZCFL1s4wkYtsNBgdi98/gviz/tq?tqx=out:csv&gid=0';
+const CSV_EXPORT = 'https://docs.google.com/spreadsheets/d/17ZclxoAJXJNw2ejkgS-dqFH1ZCFL1s4wkYtsNBgdi98/export?format=csv&gid=0';
 
 const PAGE_SIZE = 50;
 
@@ -437,36 +438,35 @@ function statusBadge(s){
 }
 
 async function fetchCSV(){
-  const nc = '&nocache=' + Date.now();
+  const t = Date.now();
   const sources = [
-    {label:'Direto', url: CSV_DIRECT + nc},
-    {label:'AllOrigins', url:'https://api.allorigins.win/raw?url='+encodeURIComponent(CSV_DIRECT+nc)},
-    {label:'CorsProxy', url:'https://corsproxy.io/?'+encodeURIComponent(CSV_DIRECT)},
-    {label:'CodeTabs',  url:'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(CSV_DIRECT)}
+    {label:'GVIZ', url: CSV_DIRECT + '&t=' + t},
+    {label:'Export', url: CSV_EXPORT + '&nocache=' + t},
+    {label:'AllOrigins', url:'https://api.allorigins.win/raw?url='+encodeURIComponent(CSV_EXPORT)},
+    {label:'CorsProxy', url:'https://corsproxy.io/?'+encodeURIComponent(CSV_EXPORT)},
+    {label:'CodeTabs', url:'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(CSV_EXPORT)}
   ];
   let lastErr = null;
   for(const src of sources){
     try{
-      document.getElementById('updTime').textContent = 'Tentando ' + src.label + '...';
+      document.getElementById('updTime').textContent = 'Carregando via ' + src.label + '...';
       const r = await Promise.race([
-        fetch(src.url, {cache:'no-store'}),
-        new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),12000))
+        fetch(src.url),
+        new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),15000))
       ]);
       if(r.ok){
         const txt = await r.text();
         if(txt && txt.length > 100){
-          console.log('OK via', src.label, '| length:', txt.length);
+          console.log('Dados carregados via', src.label, '| bytes:', txt.length);
           return txt;
         }
-      } else {
-        console.warn(src.label, 'HTTP', r.status);
       }
     } catch(e){
-      console.warn(src.label, 'falhou:', e.message);
+      console.warn(src.label, ':', e.message);
       lastErr = e;
     }
   }
-  throw lastErr || new Error('Todas as fontes falharam');
+  throw lastErr || new Error('Nenhuma fonte respondeu');
 }
 
 async function loadData(){
